@@ -1,16 +1,17 @@
-import { defineConfig } from 'prisma/config';
+import 'dotenv/config';
+import { defineConfig, env } from 'prisma/config';
 
 export default defineConfig({
-  // En Prisma 7, la configuración de conexión se define aquí
-  earlyAccess: true, // A veces requerido para ciertas funciones de configuración en versiones 7.x
-  utils: {
-    // Si necesitas cargar variables de entorno manualmente
-    schemaPath: 'prisma/schema.prisma',
-  },
-  // La propiedad correcta para definir las URLs es dentro de 'datasources' (en plural)
-  // o directamente en 'datasource' dependiendo de la versión exacta de la interfaz.
-  // Pero lo más seguro para evitar el error de TS es:
+  schema: 'prisma/schema.prisma',
   datasource: {
-    url: process.env.DIRECT_URL,
+    /**
+     * Para el CLI (Migraciones), usamos la DIRECT_URL (puerto 5432).
+     * Esto evita que las migraciones fallen por el Transaction Mode de Neon.
+     */
+    url: env('DIRECT_URL'),
+  },
+  migrations: {
+    path: 'prisma/migrations',
+    seed: 'prisma/seed.ts',
   },
 });
