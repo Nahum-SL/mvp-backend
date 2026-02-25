@@ -48,7 +48,7 @@ export class BlogService {
     });
   }
 
-  // Busqueda en la pagina /[slug]
+  // Busqueda en la pagina --> blog/[slug]
   async findBySlug(slug: string) {
     const post = await this.prisma.post.findUnique({
       where: { slug },

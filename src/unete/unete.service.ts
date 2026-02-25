@@ -15,13 +15,14 @@ export class UneteService {
     });
   }
 
-  // Actualizar
   // JobAppStatus: En el schema.prisma esta de esta manera -->
   // enum JobAppStatus {
   //   PENDIENTE
   //   REVISADO
   //   RECHAZADO
   // }
+
+  // Actualizar
   async update(id: number, status: JobAppStatus) {
     return this.prisma.jobApplication.update({
       where: { id },
