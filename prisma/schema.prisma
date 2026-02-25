@@ -30,7 +30,7 @@ model User {
 // --- ESTADOS (De los formularios) ---
 
 enum ContactStatus {
-  PENDING
+  PENDING 
   CONFIRMED
   CANCELLED
   COMPLETED
@@ -82,6 +82,13 @@ model Post {
 
 // --- SECCIÓN ÚNETE (RECURSOS HUMANOS) ---
 
+// JobApplicationStatus 
+enum JobAppStatus {
+  PENDIENTE
+  REVISADO
+  RECHAZADO
+}
+
 model JobApplication {
   id         Int      @id @default(autoincrement())
   fullName   String
@@ -92,8 +99,10 @@ model JobApplication {
   experience Int // Años
   position   String // Puesto de interés
   cvUrl      String // URL del PDF en la nube
-  status     String   @default("PENDIENTE") // PENDIENTE, REVISADO, RECHAZADO
+  status     JobAppStatus @default(PENDIENTE) // PENDIENTE, REVISADO, RECHAZADO
+
   createdAt  DateTime @default(now())
+  updateAt   DateTime @updatedAt
 }
 
 // --- SISTEMA DE INTRANET (LINKS DINÁMICOS) ---
@@ -106,4 +115,7 @@ model IntranetLink {
   icon        String? // Nombre del icono o URL
   order       Int     @default(0) // Para ordenar las cards en el dashboard
   isVisible   Boolean @default(true)
+
+  createdAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt 
 }

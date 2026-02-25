@@ -1,6 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreateContactoDto } from './dto/create-contact.dto';
+import { ContactStatus } from 'generated/prisma';
 
 @Injectable()
 export class ContactoService {
@@ -26,6 +27,13 @@ export class ContactoService {
   async findAll() {
     return this.prisma.contacto.findMany({
       orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async updateStatus(id: number, status: ContactStatus) {
+    return this.prisma.contacto.update({
+      where: { id },
+      data: { status },
     });
   }
 }

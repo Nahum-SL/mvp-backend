@@ -1,4 +1,8 @@
-import { Injectable, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreatePostDto } from './dto/create-post.dto';
 
@@ -42,5 +46,29 @@ export class BlogService {
       },
       orderBy: { createdAt: 'desc' },
     });
+  }
+
+  // Busqueda en la pagina /[slug]
+  async findBySlug(slug: string) {
+    const post = await this.prisma.post.findUnique({
+      where: { slug },
+      include: {
+        author: {
+          select: {
+            name: true,
+            avatar: true,
+            role: true,
+          },
+        },
+        category: true,
+      },
+    });
+
+    // Si post no se encuentra
+    if (!post) {
+      throw new NotFoundException(`El artículo con slug "${slug}" no existe`);
+    }
+
+    return post;
   }
 }

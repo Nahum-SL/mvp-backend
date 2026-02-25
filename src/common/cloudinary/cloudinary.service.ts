@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { v2 as cloudinary } from 'cloudinary';
 import * as streamifier from 'streamifier';
 
+// Cloudinary / Almacenara las imagenes pdf / Dandole uso en el plan gratuito
+
 @Injectable()
 export class CloudinaryService {
   constructor() {

@@ -1,6 +1,6 @@
 import { IsString, IsOptional, IsUrl, IsInt, IsBoolean } from 'class-validator';
 
-export class CreateLink {
+export class CreateLinkDto {
   @IsString()
   title: string;
 

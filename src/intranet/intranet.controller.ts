@@ -13,7 +13,6 @@ export class IntranetController {
     const user = req.user;
 
     // Aquí puedes personalizar la respuesta según el rol
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const links = await this.intranetService.getLinksByRole(user.role);
 
     return {

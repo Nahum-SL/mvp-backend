@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
+import { JobAppStatus } from 'generated/prisma';
 
 @Injectable()
 export class UneteService {
@@ -11,6 +12,27 @@ export class UneteService {
         ...data,
         status: 'PENDIENTE',
       },
+    });
+  }
+
+  // Actualizar
+  // JobAppStatus: En el schema.prisma esta de esta manera -->
+  // enum JobAppStatus {
+  //   PENDIENTE
+  //   REVISADO
+  //   RECHAZADO
+  // }
+  async update(id: number, status: JobAppStatus) {
+    return this.prisma.jobApplication.update({
+      where: { id },
+      data: { status },
+    });
+  }
+
+  // JobApplication pertenece a la pagina Unete,
+  async findAll() {
+    return this.prisma.jobApplication.findMany({
+      orderBy: { createdAt: 'desc' },
     });
   }
 }

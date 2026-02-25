@@ -7,11 +7,17 @@ import {
   ParseFilePipe,
   MaxFileSizeValidator,
   FileTypeValidator,
+  UseGuards,
+  Get,
+  Param,
+  Patch,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UneteService } from './unete.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { CloudinaryService } from '../common/cloudinary/cloudinary.service';
+import { JobAppStatus } from 'generated/prisma';
 
 @Controller('unete')
 export class UneteController {
@@ -42,5 +48,16 @@ export class UneteController {
       ...createDto,
       cvUrl: upload.secure_url,
     });
+  }
+  @UseGuards(AuthGuard('jwt')) // Solo el admin logueado
+  @Get()
+  findAll() {
+    return this.uneteService.findAll();
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Patch(':id/status')
+  updateStatus(@Param('id') id: string, @Body('status') status: JobAppStatus) {
+    return this.uneteService.update(+id, status);
   }
 }

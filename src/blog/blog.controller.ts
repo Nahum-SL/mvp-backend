@@ -9,6 +9,7 @@ import {
   ParseFilePipe,
   MaxFileSizeValidator,
   FileTypeValidator,
+  Param,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
@@ -48,5 +49,10 @@ export class BlogController {
 
     // 2. Guardar post
     return this.blogService.create(createPostDto, upload.secure_url);
+  }
+
+  @Get(':slug') // GET /api/v1/blog/consejos-tributarios
+  findOne(@Param('slug') slug: string) {
+    return this.blogService.findBySlug(slug);
   }
 }
