@@ -1,8 +1,8 @@
 {
   "name": "asescon-app",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Backend",
+  "author": "Nahum Salazar",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

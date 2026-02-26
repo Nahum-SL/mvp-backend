@@ -3,7 +3,7 @@ import { IntranetService } from './intranet.service';
 import { IntranetController } from './intranet.controller';
 
 @Module({
-  controllers: [IntranetService],
-  providers: [IntranetController],
+  providers: [IntranetService],
+  controllers: [IntranetController],
 })
 export class IntranetModule {}

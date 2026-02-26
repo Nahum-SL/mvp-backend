@@ -1,20 +1,18 @@
-import { PrismaClient } from '../generated/prisma';
+import { prismaAdp } from 'src/db';
 import * as bcrypt from 'bcrypt';
 
-const prisma = new PrismaClient();
-
 async function main() {
-  console.log('🌱 Iniciando el proceso de seeding...');
+  console.log('Iniciando el proceso de seeding...');
 
   // 1. Limpiar datos previos (Opcional, ten cuidado en producción)
-  // await prisma.user.deleteMany();
-  // await prisma.category.deleteMany();
+  // await prismaAdp.user.deleteMany();
+  // await prismaAdp.category.deleteMany();
 
   // 2. Crear Usuario Admin
   const adminPassword = 'A*-DM-*pssw**_137_*902'; // Contraseña del Admin
   const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
-  const admin = await prisma.user.upsert({
+  const admin = await prismaAdp.user.upsert({
     where: { email: 'admin@asescon.pe' },
     update: {},
     create: {
@@ -27,7 +25,7 @@ async function main() {
     },
   });
 
-  console.log(`✅ Usuario Admin creado: ${admin.email}`);
+  console.log(`:) Usuario Admin creado: ${admin.email}`);
 
   // 3. Crear Categorías para el Blog
   const categories = [
@@ -38,7 +36,7 @@ async function main() {
   ];
 
   for (const cat of categories) {
-    await prisma.category.upsert({
+    await prismaAdp.category.upsert({
       where: { name: cat.name },
       update: {},
       create: cat,
@@ -65,20 +63,20 @@ async function main() {
   ];
 
   for (const link of links) {
-    await prisma.intranetLink.create({
+    await prismaAdp.intranetLink.create({
       data: link,
     });
   }
-  console.log('✅ Links de intranet configurados.');
+  console.log(':) Links de intranet configurados.');
 
-  console.log('🚀 Seeding completado con éxito.');
+  console.log(':) Seeding completado con éxito.');
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Error en el seeding:', e);
+    console.error(':( Error en el seeding:', e);
     process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect();
+    await prismaAdp.$disconnect();
   });

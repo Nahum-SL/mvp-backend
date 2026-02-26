@@ -1,8 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreateContactoDto } from './dto/create-contact.dto';
-import { ContactStatus } from 'generated/prisma';
-
+import { ContactStatus } from 'generated/prisma/enums';
 @Injectable()
 export class ContactoService {
   constructor(private prisma: PrismaService) {}

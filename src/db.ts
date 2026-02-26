@@ -8,4 +8,4 @@ const adapter = new PrismaNeon(
   { schema: 'myPostgresSchema' },
 );
 
-export const prisma = new PrismaClient({ adapter });
+export const prismaAdp = new PrismaClient({ adapter });

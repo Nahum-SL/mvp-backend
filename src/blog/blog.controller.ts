@@ -14,7 +14,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 import { BlogService } from './blog.service';
-import { CreatePostDto } from './dto/create-post.dto';
+import { CreatePostDto } from './dto/create-blog.dto';
 import { CloudinaryService } from '../common/cloudinary/cloudinary.service';
 
 @Controller('blog')

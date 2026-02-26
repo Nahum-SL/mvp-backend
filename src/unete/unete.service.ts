@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { JobAppStatus } from 'generated/prisma';
+import { JobAppStatus } from 'generated/prisma/enums';
 
 @Injectable()
 export class UneteService {

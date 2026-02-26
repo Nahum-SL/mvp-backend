@@ -17,7 +17,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UneteService } from './unete.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { CloudinaryService } from '../common/cloudinary/cloudinary.service';
-import { JobAppStatus } from 'generated/prisma';
+import { JobAppStatus } from 'generated/prisma/enums';
 
 @Controller('unete')
 export class UneteController {

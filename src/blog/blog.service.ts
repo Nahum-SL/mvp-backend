@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { CreatePostDto } from './dto/create-post.dto';
+import { CreatePostDto } from './dto/create-blog.dto';
 
 @Injectable()
 export class BlogService {

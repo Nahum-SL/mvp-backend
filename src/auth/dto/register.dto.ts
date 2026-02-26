@@ -7,7 +7,7 @@ import {
   IsUrl,
   MinLength,
 } from 'class-validator';
-import { Role } from 'generated/prisma';
+import { Role } from 'generated/prisma/enums';
 
 export class RegisterDto {
   @IsEmail({}, { message: 'El formato del correo es inválido ' })
