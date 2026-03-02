@@ -58,16 +58,17 @@ model Contacto {
 model Category {
   id    Int    @id @default(autoincrement())
   name  String @unique
+  slug  String @unique
   posts Post[]
 }
 
 model Post {
-  id          String  @id @default(cuid())
+  id          Int     @id @default(autoincrement())
   title       String
   slug        String  @unique
-  excerpt     String  @db.VarChar(255)
   content     String  @db.Text
-  image       String // URL de la imagen (Cloudinary/S3)
+  excerpt     String  @db.VarChar(255)
+  image       String? // URL de la imagen (Cloudinary/S3)
   published   Boolean @default(false)
   readingTime Int     @default(5)
 

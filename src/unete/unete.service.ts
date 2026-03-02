@@ -23,15 +23,6 @@ export class UneteService {
     });
   }
 
-  // async create(data: any) {
-  //   return this.prisma.jobApplication.create({
-  //     data: {
-  //       ...data,
-  //       status: 'PENDIENTE',
-  //     },
-  //   });
-  // }
-
   // JobAppStatus: En el schema.prisma esta de esta manera -->
   // enum JobAppStatus {
   //   PENDIENTE
@@ -47,7 +38,7 @@ export class UneteService {
     });
   }
 
-  // JobApplication pertenece a la pagina Unete,
+  // Obtener los datos
   async findAll() {
     return this.prisma.jobApplication.findMany({
       orderBy: { createdAt: 'desc' },
