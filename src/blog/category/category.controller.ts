@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/categoy.dto';
-import { JwtStrategy } from 'src/auth/strategies/jwt.strategies';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('blog/category')
 export class CategoryController {
@@ -14,7 +14,7 @@ export class CategoryController {
   }
 
   @Post()
-  @UseGuards(JwtStrategy) // Solo admin puede crear categorías
+  @UseGuards(AuthGuard('jwt')) // Solo admin puede crear categorías
   create(@Body() dto: CreateCategoryDto) {
     return this.categoryService.create(dto);
   }

@@ -14,7 +14,7 @@ import { PostsService } from './post.service';
 import { CloudinaryService } from 'src/common/cloudinary/cloudinary.service';
 import { CreatePostDto } from './dto/create-post.dto';
 
-@Controller('/posts')
+@Controller('/post')
 export class PostsController {
   constructor(
     private readonly postsService: PostsService,
