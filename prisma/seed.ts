@@ -29,16 +29,16 @@ async function main() {
 
   // 3. Crear Categorías para el Blog
   const categories = [
-    { name: 'Tributario' },
-    { name: 'Laboral' },
-    { name: 'Contabilidad' },
-    { name: 'Actualidad' },
+    { name: 'Tributario', slug: 'tributario' },
+    { name: 'Laboral', slug: 'laboral' },
+    { name: 'Contabilidad', slug: 'contabilidad' },
+    { name: 'Actualidad', slug: 'actualidad' },
   ];
 
   for (const cat of categories) {
     await prismaAdp.category.upsert({
       where: { name: cat.name },
-      update: {},
+      update: { slug: cat.slug },
       create: cat,
     });
   }

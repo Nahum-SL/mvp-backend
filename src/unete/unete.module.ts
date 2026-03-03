@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UneteController } from './unete.controller';
 import { UneteService } from './unete.service';
-import { CloudinaryModule } from 'src/common/cloudinary/clodinary.module';
+import { CloudinaryModule } from 'src/common/cloudinary/cloudinary.module';
 
 @Module({
   imports: [CloudinaryModule],

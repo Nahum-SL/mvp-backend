@@ -11,10 +11,10 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 import { PostsService } from './post.service';
-import { CloudinaryService } from '../common/cloudinary/cloudinary.service';
+import { CloudinaryService } from 'src/common/cloudinary/cloudinary.service';
 import { CreatePostDto } from './dto/create-post.dto';
 
-@Controller('posts')
+@Controller('/posts')
 export class PostsController {
   constructor(
     private readonly postsService: PostsService,
