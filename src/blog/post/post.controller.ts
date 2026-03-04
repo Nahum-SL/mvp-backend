@@ -7,6 +7,8 @@ import {
   UseInterceptors,
   UseGuards,
   Req,
+  Param,
+  NotFoundException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
@@ -47,8 +49,23 @@ export class PostsController {
     );
   }
 
-  @Get()
-  findAll() {
+  @Get('admin') // Podrías crear una ruta específica para el admin
+  @UseGuards(AuthGuard('jwt'))
+  findAllAdmin() {
     return this.postsService.findAllAdmin();
+  }
+
+  @Get() // La ruta pública
+  findAll() {
+    return this.postsService.findAllPublic();
+  }
+
+  @Get(':slug')
+  async findOne(@Param('slug') slug: string) {
+    const post = await this.postsService.findOneBySlug(slug);
+    if (!post) {
+      throw new NotFoundException(`Post con slug ${slug} no encontrado`);
+    }
+    return post;
   }
 }

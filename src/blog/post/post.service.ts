@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { prismaAdp } from 'src/db';
 import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
 export class PostsService {
@@ -31,6 +32,17 @@ export class PostsService {
     });
   }
 
+  // Actualizar
+  async update(id: number, updatePostDto: UpdatePostDto, imageUrl?: string) {
+    return await prismaAdp.post.update({
+      where: { id },
+      data: {
+        ...updatePostDto,
+        ...(imageUrl && { image: imageUrl }), // Solo actualiza la imagen si viene una nueva URL
+      },
+    });
+  }
+
   // Añadimos este para la tabla del Admin en Next.js
   async findAllAdmin() {
     return await prismaAdp.post.findMany({
@@ -40,5 +52,31 @@ export class PostsService {
       },
       orderBy: { createdAt: 'desc' },
     });
+  }
+  // En post.service.ts
+  async findAllPublic() {
+    return await prismaAdp.post.findMany({
+      where: { published: true }, // 👈 Importante para que no se vean los borradores en el Home
+      orderBy: { createdAt: 'desc' },
+      include: { author: true, category: true },
+    });
+  }
+
+  async findOneBySlug(slug: string) {
+    const post = await prismaAdp.post.findUnique({
+      where: { slug },
+      include: {
+        category: true,
+        author: {
+          select: {
+            name: true,
+            avatar: true,
+          },
+        },
+      },
+    });
+
+    if (!post) return null;
+    return post;
   }
 }
