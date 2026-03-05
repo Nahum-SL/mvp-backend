@@ -6,7 +6,7 @@ import {
   MinLength,
   MaxLength,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
 
 export class CreatePostDto {
   @IsString()
@@ -23,11 +23,11 @@ export class CreatePostDto {
   @IsNotEmpty()
   content: string;
 
-  @Type(() => Number) // Convierte el string de FormData a número
+  @Transform(({ value }) => parseInt(value))
   @IsNumber()
   categoryId: number;
 
-  @Type(() => Boolean) // Convierte "true"/"false" a booleano
+  @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()
   published: boolean;
 }

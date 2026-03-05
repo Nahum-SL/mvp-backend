@@ -33,14 +33,49 @@ export class PostsService {
   }
 
   // Actualizar
+  // src/blog/post.service.ts
+
   async update(id: number, updatePostDto: UpdatePostDto, imageUrl?: string) {
-    return await prismaAdp.post.update({
-      where: { id },
-      data: {
-        ...updatePostDto,
-        ...(imageUrl && { image: imageUrl }), // Solo actualiza la imagen si viene una nueva URL
-      },
-    });
+    try {
+      // 1. Validar que el post existe
+      const postExists = await prismaAdp.post.findUnique({ where: { id } });
+      if (!postExists) throw new Error('Post no encontrado');
+
+      // 2. Limpiar los datos para Prisma
+      const data: any = {};
+
+      if (updatePostDto.title) data.title = updatePostDto.title;
+      if (updatePostDto.excerpt) data.excerpt = updatePostDto.excerpt;
+      if (updatePostDto.content) data.content = updatePostDto.content;
+
+      // Forzamos conversión manual por seguridad
+      if (updatePostDto.categoryId)
+        data.categoryId = Number(updatePostDto.categoryId);
+
+      // Manejo de booleanos desde String (FormData)
+      if (updatePostDto.published !== undefined) {
+        data.published = String(updatePostDto.published) === 'true';
+      }
+
+      if (imageUrl) data.image = imageUrl;
+
+      // Solo actualizamos el slug si el título cambió
+      if (updatePostDto.title && updatePostDto.title !== postExists.title) {
+        const baseSlug = updatePostDto.title
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/(^-|-$)+/g, '');
+        data.slug = `${baseSlug}-${Date.now().toString().slice(-4)}`;
+      }
+
+      return await prismaAdp.post.update({
+        where: { id },
+        data,
+      });
+    } catch (error) {
+      console.error('ERROR_EN_PRISMA:', error);
+      throw error;
+    }
   }
 
   // Añadimos este para la tabla del Admin en Next.js
@@ -65,6 +100,25 @@ export class PostsService {
   async findOneBySlug(slug: string) {
     const post = await prismaAdp.post.findUnique({
       where: { slug },
+      include: {
+        category: true,
+        author: {
+          select: {
+            name: true,
+            avatar: true,
+          },
+        },
+      },
+    });
+
+    if (!post) return null;
+    return post;
+  }
+
+  // Buscar por Id
+  async findOneById(id: number) {
+    const post = await prismaAdp.post.findUnique({
+      where: { id },
       include: {
         category: true,
         author: {
