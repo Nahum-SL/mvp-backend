@@ -1,5 +1,4 @@
-// src/intranet/dto/create-link.dto.ts
-import { IsString, IsOptional, IsUrl, IsInt, IsBoolean } from 'class-validator';
+import { IsString, IsOptional, IsInt, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class CreateLinkDto {
@@ -9,7 +8,8 @@ export class CreateLinkDto {
   @IsString()
   description: string;
 
-  @IsUrl()
+  // 1. QUITAMOS @IsUrl() y dejamos @IsString() para permitir "/"
+  @IsString()
   url: string;
 
   @IsString()
@@ -18,11 +18,11 @@ export class CreateLinkDto {
 
   @IsInt()
   @IsOptional()
-  @Type(() => Number) // Esto asegura que el string se convierta a número
+  @Type(() => Number)
   order?: number;
 
   @IsBoolean()
   @IsOptional()
-  @Type(() => Boolean) // Esto asegura que el string "true" sea boolean true
+  @Type(() => Boolean)
   isVisible?: boolean;
 }

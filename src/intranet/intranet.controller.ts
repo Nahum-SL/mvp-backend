@@ -63,4 +63,10 @@ export class IntranetController {
   async remove(@Param('id', ParseIntPipe) id: number) {
     return this.intranetService.remove(id);
   }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('admin/link/:id')
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.intranetService.findOne(id);
+  }
 }
