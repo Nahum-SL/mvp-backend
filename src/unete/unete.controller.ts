@@ -57,7 +57,10 @@ export class UneteController {
 
   @UseGuards(AuthGuard('jwt'))
   @Patch(':id/status')
-  updateStatus(@Param('id') id: string, @Body('status') status: JobAppStatus) {
-    return this.uneteService.update(+id, status);
+  async updateStatus(
+    @Param('id') id: string,
+    @Body('status') status: JobAppStatus,
+  ) {
+    return this.uneteService.update(id, status);
   }
 }

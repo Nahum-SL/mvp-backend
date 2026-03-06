@@ -7,7 +7,6 @@ import {
   Delete,
   Param,
   UseGuards,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { ContactoService } from './contacto.service';
 import { CreateContactoDto } from './dto/create-contact.dto';
@@ -37,14 +36,14 @@ export class ContactoController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('admin/:id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  findOne(@Param('id') id: string) {
     return this.contactoService.findOne(id);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Patch('admin/status/:id')
   updateStatus(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body() updateDto: UpdateContactStatusDto,
   ) {
     return this.contactoService.updateStatus(id, updateDto.status);
@@ -52,7 +51,7 @@ export class ContactoController {
 
   @UseGuards(AuthGuard('jwt'))
   @Delete('admin/delete/:id')
-  remove(@Param('id', ParseIntPipe) id: number) {
+  remove(@Param('id') id: string) {
     return this.contactoService.remove(id);
   }
 }

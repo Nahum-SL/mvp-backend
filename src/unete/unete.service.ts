@@ -31,9 +31,9 @@ export class UneteService {
   // }
 
   // Actualizar
-  async update(id: number, status: JobAppStatus) {
+  async update(id: string, status: JobAppStatus) {
     return this.prisma.jobApplication.update({
-      where: { id },
+      where: { id: id },
       data: { status },
     });
   }

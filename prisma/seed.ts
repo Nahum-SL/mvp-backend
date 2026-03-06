@@ -37,8 +37,8 @@ async function main() {
 
   for (const cat of categories) {
     await prismaAdp.category.upsert({
-      where: { name: cat.name },
-      update: { slug: cat.slug },
+      where: { slug: cat.slug },
+      update: { name: cat.name },
       create: cat,
     });
   }

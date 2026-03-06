@@ -36,14 +36,14 @@ export class ContactoService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const contacto = await this.prisma.contacto.findUnique({ where: { id } });
     if (!contacto)
       throw new NotFoundException(`Contacto con ID ${id} no encontrado`);
     return contacto;
   }
 
-  async updateStatus(id: number, status: ContactStatus) {
+  async updateStatus(id: string, status: ContactStatus) {
     await this.findOne(id); // Validamos que exista
     return this.prisma.contacto.update({
       where: { id },
@@ -51,7 +51,7 @@ export class ContactoService {
     });
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     await this.findOne(id);
     return this.prisma.contacto.delete({ where: { id } });
   }

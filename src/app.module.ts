@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './blog/post/post.module';
 import { CategoryModule } from './blog/category/category.module';
 import { CloudinaryModule } from './common/cloudinary/cloudinary.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CloudinaryModule } from './common/cloudinary/cloudinary.module';
     AuthModule,
     PostsModule,
     CategoryModule,
+    AdminModule,
   ],
 })
 export class AppModule {}
