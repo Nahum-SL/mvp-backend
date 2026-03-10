@@ -40,6 +40,7 @@ export class ContactoController {
     return this.contactoService.findOne(id);
   }
 
+  // Actualizar estado
   @UseGuards(AuthGuard('jwt'))
   @Patch('admin/status/:id')
   updateStatus(
@@ -49,6 +50,7 @@ export class ContactoController {
     return this.contactoService.updateStatus(id, updateDto.status);
   }
 
+  // Eliminar Contacto
   @UseGuards(AuthGuard('jwt'))
   @Delete('admin/delete/:id')
   remove(@Param('id') id: string) {
