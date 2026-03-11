@@ -90,7 +90,7 @@ enum JobAppStatus {
 }
 
 model JobApplication {
-  id         String        @id @default(cuid()) // <-- Cambiado a cuid()
+  id         String       @id @default(cuid()) // <-- Cambiado a cuid()
   fullName   String
   dni        String       @unique
   age        Int
@@ -102,7 +102,7 @@ model JobApplication {
   status     JobAppStatus @default(PENDIENTE) // PENDIENTE, REVISADO, RECHAZADO
 
   createdAt DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 }
 
 // --- SISTEMA DE INTRANET (LINKS DINÁMICOS) ---
@@ -118,4 +118,36 @@ model IntranetLink {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// --- SISTEMA DE SERVICIOS ---
+
+model Service {
+  id          Int     @id @default(autoincrement())
+  title       String
+  slug        String  @unique
+  description String  @db.Text
+  icon        String? // Nombre del icono de Lucide
+  image       String? // URL de la imagen almacenada en Cloudinary
+  // Para el selector inteligente
+  businessTypes String[] // ['mype', 'startup', 'corporativo']
+  painPoints    String[] // ['impuestos', 'legal', 'planillas']
+
+  features  ServiceFeature[]
+  isVisible Boolean          @default(true)
+  order     Int              @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("services")
+}
+
+model ServiceFeature {
+  id        Int     @id @default(autoincrement())
+  name      String
+  serviceId Int
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@map("service_features")
 }
