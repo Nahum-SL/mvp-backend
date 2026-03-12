@@ -16,6 +16,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 import { PostsService } from './post.service';
 import { CloudinaryService } from 'src/common/cloudinary/cloudinary.service';
+// Acciones
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 

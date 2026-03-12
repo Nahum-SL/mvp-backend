@@ -109,13 +109,4 @@ export class ServicioService {
       orderBy: { createdAt: 'desc' },
     });
   }
-
-  // Obtener datos para ser publicos
-  async findAllPublic() {
-    return await prismaAdp.service.findMany({
-      where: { isVisible: true },
-      orderBy: { createdAt: 'desc' },
-      include: { features: true },
-    });
-  }
 }

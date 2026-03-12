@@ -9,6 +9,7 @@ import { PrismaService } from 'prisma/prisma.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
+import { prismaAdp } from 'src/db';
 
 @Injectable()
 export class AuthService {
@@ -54,8 +55,8 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
 
-    // 1. Buscar el usuario en Neon por email
-    const user = await this.prisma.user.findUnique({
+    // 1. Buscar el usupario en Neon por email
+    const user = await prismaAdp.user.findUnique({
       where: { email },
     });
 

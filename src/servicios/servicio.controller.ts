@@ -10,15 +10,18 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ServicioService } from './servicio.service';
+import { CloudinaryService } from 'src/common/cloudinary/cloudinary.service';
+// Acciones
 import { CreateServicioDto } from './dto/create-servicio.dto';
 import { UpdateServicioDto } from './dto/update-servicio.dto';
-import { CloudinaryService } from 'src/common/cloudinary/cloudinary.service';
 
-@Controller('servicio')
+@Controller('/servicio')
 export class ServicioController {
   constructor(
     private readonly servicioService: ServicioService,
@@ -36,7 +39,7 @@ export class ServicioController {
     let imageUrl = '';
 
     if (file) {
-      const upload = await this.cloudinaryService.uploadFile(file, 'servicios');
+      const upload = await this.cloudinaryService.uploadFile(file, 'servicio');
       imageUrl = upload.secure_url;
     }
 
@@ -55,6 +58,11 @@ export class ServicioController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     const serviceId = Number(id);
+
+    if (isNaN(serviceId)) {
+      throw new BadRequestException('El ID del post debe ser un número válido');
+    }
+
     const currentServicio = await this.servicioService.findOneById(serviceId);
 
     let imageUrl: string | undefined;
@@ -69,7 +77,7 @@ export class ServicioController {
       }
 
       // 2. Subir la nueva
-      const upload = await this.cloudinaryService.uploadFile(file, 'servicios');
+      const upload = await this.cloudinaryService.uploadFile(file, 'servicio');
       imageUrl = upload.secure_url;
     }
 
@@ -101,19 +109,26 @@ export class ServicioController {
     return this.servicioService.findAllAdmin();
   }
 
-  @Get()
-  findAllPublic() {
-    return this.servicioService.findAllPublic();
+  // Obtener por id
+  @Get(':id')
+  async findOneById(@Param('id') id: string) {
+    const servicio = await this.servicioService.findOneById(Number(id));
+    if (!servicio) {
+      throw new NotFoundException(`Servicio con ${id} no encontrado`);
+    }
+    return servicio;
   }
 
-  // PÚBLICO: Para el "Selector de Soluciones" en el frontend
+  // RUTA PÚBLICA (Única)
+  // Maneja tanto el "ver todos" como el "selector inteligente" con Query Params
   @Get()
   findAll(@Query('type') type?: string, @Query('pain') pain?: string) {
+    // Si no hay queries, el service debería devolver todos los visibles por defecto
     return this.servicioService.findAll(type, pain);
   }
 
   @Get(':slug')
-  findOne(@Param('slug') slug: string) {
+  findOneBySlug(@Param('slug') slug: string) {
     return this.servicioService.findOneBySlug(slug);
   }
 }
