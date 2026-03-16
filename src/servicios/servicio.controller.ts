@@ -119,9 +119,9 @@ export class ServicioController {
     return servicio;
   }
 
-  @Get(':slug')
-  findOneBySlug(@Param('slug') slug: string) {
-    return this.servicioService.findOneBySlug(slug);
+  @Get('slug/:slug')
+  async findOneBySlug(@Param('slug') slug: string) {
+    return await this.servicioService.findOneBySlug(slug);
   }
 
   // RUTA PÚBLICA (Única)

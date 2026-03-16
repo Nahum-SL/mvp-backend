@@ -12,15 +12,24 @@ import { ServicioModule } from './servicios/servicio.module';
 
 @Module({
   imports: [
+    // Prisma
     PrismaModule,
-    CloudinaryModule,
-    UneteModule,
-    IntranetModule,
-    ContactoModule,
+    // Admin
+    AdminModule,
+    // Auth
     AuthModule,
+    //Blog
     PostsModule,
     CategoryModule,
-    AdminModule,
+    // Cloudinary
+    CloudinaryModule,
+    // Contacto
+    ContactoModule,
+    // Intranet
+    IntranetModule,
+    // Unete
+    UneteModule,
+    // Servicio
     ServicioModule,
   ],
 })

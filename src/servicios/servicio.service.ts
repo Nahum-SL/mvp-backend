@@ -13,7 +13,9 @@ export class ServicioService {
       data: {
         ...data,
         // Aseguramos tipos correctos para Prisma/PostgreSQL
-        icon: imageUrl || null,
+        icon: data.icon || null,
+        image: imageUrl || null,
+
         // Manejo de Arrays (NestJS/Multer a veces los agrupa raro si vienen de FormData)
         businessTypes: Array.isArray(data.businessTypes)
           ? data.businessTypes
@@ -58,26 +60,38 @@ export class ServicioService {
     imageUrl?: string,
   ) {
     const { features, ...data } = updateServicioDto;
-
-    // 1. Verificar existencia con el helper ajustado a number
     await this.findOneById(id);
 
-    const updateData: any = { ...data };
+    const updateData: any = {
+      ...data,
+      // Asegurar que sean arrays incluso si llegan como string desde FormData
+      businessTypes: data.businessTypes
+        ? Array.isArray(data.businessTypes)
+          ? data.businessTypes
+          : [data.businessTypes]
+        : undefined,
+      painPoints: data.painPoints
+        ? Array.isArray(data.painPoints)
+          ? data.painPoints
+          : [data.painPoints]
+        : undefined,
+    };
 
-    if (imageUrl) updateData.icon = imageUrl;
+    if (imageUrl) updateData.image = imageUrl; // Usar 'image' que es tu columna en DB
     if (data.order) updateData.order = Number(data.order);
     if (data.isVisible !== undefined)
       updateData.isVisible = String(data.isVisible) === 'true';
 
     return await prismaAdp.service.update({
-      where: { id }, // Prisma ahora espera un Int
+      where: { id },
       data: {
         ...updateData,
-        ...(imageUrl && { image: imageUrl }),
         ...(features && {
           features: {
-            deleteMany: {},
-            create: features.map((name) => ({ name })),
+            deleteMany: {}, // Limpia las anteriores
+            create: (Array.isArray(features) ? features : [features]).map(
+              (name) => ({ name }),
+            ),
           },
         }),
       },
