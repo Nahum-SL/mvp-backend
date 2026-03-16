@@ -1,24 +1,16 @@
 import { Injectable, ConflictException } from '@nestjs/common';
-import { PrismaService } from 'prisma/prisma.service';
+import { prismaAdp } from 'src/db';
 import { CreateCategoryDto } from './dto/categoy.dto';
 import slugify from 'slugify'; // Opcional: pnpm add slugify
 
 @Injectable()
 export class CategoryService {
-  constructor(private prisma: PrismaService) {}
-
-  async findAll() {
-    return this.prisma.category.findMany({
-      orderBy: { name: 'asc' },
-      include: { _count: { select: { posts: true } } }, // Útil para ver cuántos posts tiene cada una
-    });
-  }
-
+  //
   async create(dto: CreateCategoryDto) {
     const slug = dto.slug || slugify(dto.name, { lower: true });
 
     try {
-      return await this.prisma.category.create({
+      return await prismaAdp.category.create({
         data: { ...dto, slug },
       });
     } catch (error) {
@@ -27,5 +19,12 @@ export class CategoryService {
       }
       throw error;
     }
+  }
+
+  async findAll() {
+    return prismaAdp.category.findMany({
+      orderBy: { name: 'asc' },
+      include: { _count: { select: { posts: true } } }, // Útil para ver cuántos posts tiene cada una
+    });
   }
 }

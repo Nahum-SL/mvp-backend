@@ -8,6 +8,7 @@ import {
   IsNotEmpty,
   MaxLength,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreateServicioDto {
   @IsString()
@@ -39,6 +40,7 @@ export class CreateServicioDto {
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
+  @Transform(({ value }) => (Array.isArray(value) ? value : [value]))
   features?: string[]; // Los recibimos como array de strings por simplicidad
 
   @IsBoolean()

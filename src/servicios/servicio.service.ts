@@ -6,20 +6,33 @@ import { UpdateServicioDto } from './dto/update-servicio.dto';
 @Injectable()
 export class ServicioService {
   async create(createServicioDto: CreateServicioDto, imageUrl?: string) {
+    // 1. Extraemos features y limpiamos los datos que vienen del FormData
     const { features, ...data } = createServicioDto;
 
     return await prismaAdp.service.create({
       data: {
         ...data,
+        // Aseguramos tipos correctos para Prisma/PostgreSQL
         icon: imageUrl || null,
+        // Manejo de Arrays (NestJS/Multer a veces los agrupa raro si vienen de FormData)
         businessTypes: Array.isArray(data.businessTypes)
           ? data.businessTypes
-          : [],
+          : data.businessTypes
+            ? [data.businessTypes]
+            : [],
+
         painPoints: Array.isArray(data.painPoints) ? data.painPoints : [],
+
         isVisible: String(data.isVisible) === 'true',
         order: Number(data.order || 0),
+
+        // Relación 1:N con Features
         features: {
-          create: features?.map((name) => ({ name })) || [],
+          create: Array.isArray(features)
+            ? features.map((name) => ({ name }))
+            : features
+              ? [{ name: features }]
+              : [],
         },
       },
       include: { features: true },

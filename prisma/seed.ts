@@ -5,7 +5,7 @@ async function main() {
   console.log('Iniciando el proceso de seeding...');
 
   // 1. Limpiar datos previos (Opcional, ten cuidado en producción)
-  // await prismaAdp.user.deleteMany();
+  // await prismaAdp.userpnpm.deleteMany();
   // await prismaAdp.category.deleteMany();
 
   // 2. Crear Usuario Admin

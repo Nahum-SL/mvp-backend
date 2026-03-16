@@ -6,7 +6,7 @@ import { AuthGuard } from '@nestjs/passport';
 @Controller('blog/category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
-
+  //
   @Get()
   // Este es público para que el formulario y el blog puedan leerlo
   findAll() {

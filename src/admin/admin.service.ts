@@ -1,17 +1,15 @@
 // src/admin/admin.service.ts
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'prisma/prisma.service';
+import { prismaAdp } from 'src/db';
 
 @Injectable()
 export class AdminService {
-  constructor(private prisma: PrismaService) {}
-
   async getStats() {
     // Ejecutamos todas las promesas en paralelo para máxima velocidad
     const [leadsCount, postsCount, linksCount] = await Promise.all([
-      this.prisma.contacto.count(),
-      this.prisma.post.count(),
-      this.prisma.intranetLink.count(),
+      prismaAdp.contacto.count(),
+      prismaAdp.post.count(),
+      prismaAdp.intranetLink.count(),
     ]);
 
     return {

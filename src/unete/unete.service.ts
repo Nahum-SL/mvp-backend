@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'prisma/prisma.service';
+import { prismaAdp } from 'src/db';
 import { JobAppStatus } from 'generated/prisma/enums';
 import { CreateApplicationDto } from './dto/create-application.dto';
 
 @Injectable()
 export class UneteService {
-  constructor(private prisma: PrismaService) {}
-
   async create(createDto: CreateApplicationDto & { cvUrl: string }) {
-    return this.prisma.jobApplication.create({
+    return prismaAdp.jobApplication.create({
       data: {
         fullName: createDto.fullName,
         dni: createDto.dni,
@@ -32,7 +30,7 @@ export class UneteService {
 
   // Actualizar
   async update(id: string, status: JobAppStatus) {
-    return this.prisma.jobApplication.update({
+    return prismaAdp.jobApplication.update({
       where: { id: id },
       data: { status },
     });
@@ -40,7 +38,7 @@ export class UneteService {
 
   // Obtener los datos
   async findAll() {
-    return this.prisma.jobApplication.findMany({
+    return prismaAdp.jobApplication.findMany({
       orderBy: { createdAt: 'desc' },
     });
   }

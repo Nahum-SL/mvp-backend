@@ -119,16 +119,16 @@ export class ServicioController {
     return servicio;
   }
 
+  @Get(':slug')
+  findOneBySlug(@Param('slug') slug: string) {
+    return this.servicioService.findOneBySlug(slug);
+  }
+
   // RUTA PÚBLICA (Única)
   // Maneja tanto el "ver todos" como el "selector inteligente" con Query Params
   @Get()
   findAll(@Query('type') type?: string, @Query('pain') pain?: string) {
     // Si no hay queries, el service debería devolver todos los visibles por defecto
     return this.servicioService.findAll(type, pain);
-  }
-
-  @Get(':slug')
-  findOneBySlug(@Param('slug') slug: string) {
-    return this.servicioService.findOneBySlug(slug);
   }
 }
