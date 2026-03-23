@@ -10,10 +10,10 @@ export class IntranetService {
   constructor(private prisma: PrismaService) {}
 
   // Probando con admin
-  async getLinksByRole(role: Role) {
+  async getLinksByRole(role?: Role) {
     // Si el usuario es ADMIN, ve todos (incluso los no visibles)
     // Si es USER, solo ve los visibles.
-    const whereCondition = role === 'ADMIN' ? {} : { isVisible: true };
+    const whereCondition = role === Role.ADMIN ? {} : { isVisible: true };
 
     return this.prisma.intranetLink.findMany({
       where: whereCondition,

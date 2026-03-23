@@ -33,6 +33,14 @@ export class IntranetController {
     };
   }
 
+  // RUTA TOTALMENTE PÚBLICA
+  @Get('public-links')
+  async getPublicLinks() {
+    // Al no pasarle argumentos, el service aplicará { isVisible: true }
+    const links = await this.intranetService.getLinksByRole();
+    return { links };
+  }
+
   // ------- RUTAS DE ADMINISTRACIÓN --------
   @UseGuards(AuthGuard('jwt')) // Aquí podrías añadir un RolesGuard(Role.ADMIN)
   @Get('admin/all')
