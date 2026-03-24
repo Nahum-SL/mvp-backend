@@ -40,6 +40,7 @@ enum ContactStatus {
 
 model Contacto {
   id         String        @id @default(cuid()) // <-- Cambiado a cuid()
+  name       String
   email      String
   telefono   String        @db.VarChar(15) // Longitud 15 por prefijos internacionales (+51...)
   fechaNac   DateTime
