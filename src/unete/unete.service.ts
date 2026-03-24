@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { prismaAdp } from 'src/db';
 import { JobAppStatus } from 'generated/prisma/enums';
 import { CreateApplicationDto } from './dto/create-application.dto';
@@ -30,10 +30,18 @@ export class UneteService {
 
   // Actualizar
   async update(id: string, status: JobAppStatus) {
-    return prismaAdp.jobApplication.update({
-      where: { id: id },
-      data: { status },
-    });
+    try {
+      return prismaAdp.jobApplication.update({
+        where: { id: id },
+        data: { status },
+      });
+    } catch (error) {
+      // Si Prisma no encuentra el ID, lanza un error específico
+      throw new NotFoundException(
+        error,
+        `La postulación con ID ${id} no existe.`,
+      );
+    }
   }
 
   // Obtener los datos

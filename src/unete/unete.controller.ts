@@ -17,7 +17,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UneteService } from './unete.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { CloudinaryService } from '../common/cloudinary/cloudinary.service';
-import { JobAppStatus } from 'generated/prisma/enums';
+import { UpdateApplicationStatusDto } from './dto/update-aplication-status.dto';
 
 @Controller('unete')
 export class UneteController {
@@ -59,8 +59,8 @@ export class UneteController {
   @Patch(':id/status')
   async updateStatus(
     @Param('id') id: string,
-    @Body('status') status: JobAppStatus,
+    @Body() updateDto: UpdateApplicationStatusDto,
   ) {
-    return this.uneteService.update(id, status);
+    return this.uneteService.update(id, updateDto.status);
   }
 }
