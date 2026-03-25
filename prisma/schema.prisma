@@ -15,6 +15,39 @@ enum Role {
   CLIENTE
 }
 
+// --- SISTEMA DE DIAGNÓSTICO (RADAR DE CONTINGENCIAS) ---
+
+enum RiskLevel {
+  BAJO // Verde
+  MEDIO // Amarillo
+  ALTO // Rojo
+  CRITICO // Dark Red/Black
+}
+
+model BusinessDiagnostic {
+  id          String  @id @default(cuid())
+  companyName String?
+  ruc         String? @db.VarChar(11)
+  contactName String
+  email       String
+  phone       String  @db.VarChar(15)
+
+  // Guardamos las respuestas exactas { "tax": true, "labor": false, ... }
+  responses Json
+
+  // Resultados calculados por el backend de NestJS
+  score       Int // 0-100
+  overallRisk RiskLevel @default(MEDIO)
+
+  // Para trazabilidad: ¿Desde qué herramienta o post vino?
+  source String? @default("radar_general")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("business_diagnostics")
+}
+
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -124,12 +157,12 @@ model IntranetLink {
 // --- SISTEMA DE SERVICIOS ---
 
 model Service {
-  id          Int     @id @default(autoincrement())
-  title       String
-  slug        String  @unique
-  description String  @db.Text
-  icon        String? // Nombre del icono de Lucide
-  image       String? // URL de la imagen almacenada en Cloudinary
+  id            Int      @id @default(autoincrement())
+  title         String
+  slug          String   @unique
+  description   String   @db.Text
+  icon          String? // Nombre del icono de Lucide
+  image         String? // URL de la imagen almacenada en Cloudinary
   // Para el selector inteligente
   businessTypes String[] // ['mype', 'startup', 'corporativo']
   painPoints    String[] // ['impuestos', 'legal', 'planillas']

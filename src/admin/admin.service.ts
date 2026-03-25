@@ -9,8 +9,13 @@ export class AdminService {
   private analyticsClient: BetaAnalyticsDataClient;
 
   constructor() {
+    // En NestJS, es mejor inicializar esto así para evitar errores de despliegue:
     this.analyticsClient = new BetaAnalyticsDataClient({
-      keyFilename: 'path/to/your-credentials.json', // Usa variables de entorno mejor
+      // En lugar de keyFilename, puedes pasar las credenciales como objeto desde el .env
+      credentials: {
+        client_email: process.env.GA_CLIENT_EMAIL,
+        private_key: process.env.GA_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+      },
     });
   }
 
