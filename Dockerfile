@@ -33,9 +33,8 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 
-# VOLVEMOS A INSTALAR solo PROD y GENERAR PRISMA
-# Esto arregla el error de "Cannot find module .prisma/client"
-RUN corepack enable && pnpm i --prod --frozen-lockfile
+# 2. Instalamos prod deps + el CLI de Prisma explícitamente
+RUN corepack enable && pnpm i --prod --frozen-lockfile && pnpm add prisma -D
 
 # Forzamos la generación del cliente usando el paquete directamente
 # Si npx falla, usamos pnpm exec que es más confiable con pnpm
