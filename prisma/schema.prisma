@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
 }
 
 // --- SEGURIDAD Y USUARIOS ---
@@ -16,20 +16,19 @@ enum Role {
   CLIENTE
 }
 
-
 // Por el momento USER es el Administrador
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String // Hash de la contraseña
-  name      String
-  role      Role     @default(CLIENTE)
-  avatar    String?
-  posts     Post[] // Relación con el Blog (si es autor)
+  id       String  @id @default(uuid())
+  email    String  @unique
+  password String // Hash de la contraseña
+  name     String
+  role     Role    @default(CLIENTE)
+  avatar   String?
+  posts    Post[] // Relación con el Blog (si es autor)
 
-  twoFactorCode     String?   // El código de 6 dígitos
-  twoFactorExpires  DateTime? // Cuándo vence (ej. en 5 minutos)
-  
+  twoFactorCode    String? // El código de 6 dígitos
+  twoFactorExpires DateTime? // Cuándo vence (ej. en 5 minutos)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -38,10 +37,10 @@ model User {
 
 model AuditLog {
   id        String   @id @default(cuid())
-  action    String   // Ejemplo: "LOGIN_ATTEMPT", "2FA_SENT", "DB_ERROR"
-  status    String   // "SUCCESS", "FAILED", "INFO"
-  message   String   // "Intento de login fallido para el correo admin@..."
-  metadata  Json?    // Para guardar el IP, el navegador o el ID del usuario
+  action    String // Ejemplo: "LOGIN_ATTEMPT", "2FA_SENT", "DB_ERROR"
+  status    String // "SUCCESS", "FAILED", "INFO"
+  message   String // "Intento de login fallido para el correo admin@..."
+  metadata  Json? // Para guardar el IP, el navegador o el ID del usuario
   createdAt DateTime @default(now())
 }
 
