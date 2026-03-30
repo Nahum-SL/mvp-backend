@@ -39,4 +39,4 @@ EXPOSE 3001
 
 # Comando para desplegar migraciones e iniciar la app
 # Esto asegura que Railway actualice la base de datos antes de arrancar
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
