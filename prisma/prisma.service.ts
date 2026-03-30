@@ -1,5 +1,4 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-// IMPORTANTE: Importa desde tu carpeta generada
 import { PrismaClient } from 'generated/prisma/client';
 import { PrismaNeon } from '@prisma/adapter-neon';
 import { neonConfig } from '@neondatabase/serverless';
@@ -11,20 +10,28 @@ export class PrismaService
   implements OnModuleInit, OnModuleDestroy
 {
   constructor() {
-    // 1. Corregimos el error de WebSocket asignando como 'any'
-    // Esto es necesario porque el tipado de 'ws' y 'neonConfig' no coinciden exactamente
-    if (!global.WebSocket) {
-      neonConfig.webSocketConstructor = ws as any;
+    const connectionString = process.env.DATABASE_URL!;
+
+    // 1. Caso: Producción con Neon (Usa el adaptador de WebSockets)
+    if (connectionString.includes('neon.tech')) {
+      if (!global.WebSocket) {
+        neonConfig.webSocketConstructor = ws as any;
+      }
+      const adapter = new PrismaNeon({ connectionString });
+
+      // Pasamos el adaptador dentro del objeto de configuración
+      super({ adapter });
     }
-
-    // 2. Usamos la configuración que te funcionó en db.ts
-    // Pasamos el objeto de configuración directamente a PrismaNeon
-    const adapter = new PrismaNeon({
-      connectionString: process.env.DATABASE_URL!,
-    });
-
-    // 3. Pasamos el adapter al super constructor
-    super({ adapter });
+    // 2. Caso: Local con Docker (Usa el driver TCP estándar)
+    else {
+      super({
+        datasources: {
+          db: {
+            url: connectionString,
+          },
+        },
+      } as any);
+    }
   }
 
   async onModuleInit() {
