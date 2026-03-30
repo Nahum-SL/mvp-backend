@@ -3,42 +3,45 @@ FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# 1. Dependencias
-FROM node:20-alpine AS deps
+# 1. Dependencias y Build
+FROM node:20-alpine AS builder
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package.json pnpm-lock.yaml* ./
-RUN corepack enable && pnpm i --frozen-lockfile
 
-# 2. Builder
-FROM node:20-alpine AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# Instalamos pnpm de forma estable
+RUN npm install -g pnpm
+
+# Copiamos archivos de configuración
+COPY package.json pnpm-lock.yaml* ./
+COPY prisma ./prisma/
+COPY prisma.config.ts ./
+
+# Instalamos todas las dependencias (incluyendo devDeps para el build)
+RUN pnpm install --frozen-lockfile
+
+# Copiamos el código fuente
 COPY . .
 
 # Generar el cliente de Prisma (Indispensable para NestJS)
 RUN DATABASE_URL='postgresql://neondb_owner:npg_a2xuPpvod1YW@ep-crimson-heart-adx2a0il-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require' DIRECT_URL='postgresql://neondb_owner:npg_a2xuPpvod1YW@ep-crimson-heart-adx2a0il.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require' npx prisma generate
-
-# Construir la aplicación
-RUN corepack enable && pnpm run build
+RUN pnpm run build
 
 # 3. Runner
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV production
 
+RUN npm install -g pnpm
+
 # Copiamos solo lo necesario para ejecutar
-COPY --from=builder /app/package.json /app/pnpm-lock.yaml* ./
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/pnpm-lock.yaml* ./
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 
-# 2. Instalamos prod deps + el CLI de Prisma explícitamente
-RUN corepack enable && pnpm i --prod --frozen-lockfile && pnpm add prisma -D
-
-# Forzamos la generación del cliente usando el paquete directamente
-# Si npx falla, usamos pnpm exec que es más confiable con pnpm
-RUN pnpm exec prisma generate
+# Al tener 'prisma' en dependencies, se instalará aquí también
+RUN pnpm install --prod --frozen-lockfile && pnpm exec prisma generate
 
 # Exponemos el puerto del backend
 EXPOSE 3001
