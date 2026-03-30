@@ -6,7 +6,11 @@ WORKDIR /app
 # Copiamos archivos de dependencias
 COPY package.json pnpm-lock.yaml* ./
 
-# Instalamos pnpm y dependencias
+# 1. Dependencias
+FROM node:20-alpine AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package.json pnpm-lock.yaml* ./
 RUN corepack enable && pnpm i --frozen-lockfile
 
 # 2. Builder
@@ -24,19 +28,22 @@ RUN corepack enable && pnpm run build
 # 3. Runner
 FROM node:20-alpine AS runner
 WORKDIR /app
-
 ENV NODE_ENV production
 
 # Copiamos solo lo necesario para ejecutar
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
+
+# VOLVEMOS A INSTALAR solo PROD y GENERAR PRISMA
+# Esto arregla el error de "Cannot find module .prisma/client"
+RUN corepack enable && pnpm i --prod --frozen-lockfile
+RUN npx prisma generate
 
 # Exponemos el puerto del backend
 EXPOSE 3001
 
 # Comando para desplegar migraciones e iniciar la app
-# Esto asegura que Railway actualice la base de datos antes de arrancar
-CMD ["sh", "-c", "npx prisma migrate deploy && (node dist/main.js || node dist/src/main.js)"]
+# Usamos la ruta que confirmó el log: dist/src/main.js
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/src/main.js"]
