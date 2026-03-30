@@ -10,7 +10,6 @@ build
 
 # Docker
 docker-compose.yml
-.dockerignore
 
 # Entorno y Secretos
 .env

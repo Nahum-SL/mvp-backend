@@ -5,7 +5,6 @@
 
 # Docker
 docker-compose.yml
-Dockerfile
 
 # Logs
 logs
