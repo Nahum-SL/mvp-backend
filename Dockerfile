@@ -32,10 +32,11 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 
 # Exponemos el puerto del backend
 EXPOSE 3001
 
 # Comando para desplegar migraciones e iniciar la app
 # Esto asegura que Railway actualice la base de datos antes de arrancar
-CMD ["sh", "-c", "npx prisma migrate deploy --config prisma.config.ts && node dist/main"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main"]
