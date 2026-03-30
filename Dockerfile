@@ -9,9 +9,9 @@ RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-# Generamos solo para poder compilar el código TS
-RUN DATABASE_URL="postgresql://neondb_owner:npg_a2xuPpvod1YW@ep-crimson-heart-adx2a0il-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require" DIRECT_URL="postgresql://neondb_owner:npg_a2xuPpvod1YW@ep-crimson-heart-adx2a0il.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require" npx prisma generate
-RUN pnpm run build
+
+#Copiamos el build final
+COPY --from=builder /app/dist ./dist
 
 # 2. Etapa de Ejecución (Runner)
 FROM node:20-alpine AS runner
@@ -29,9 +29,8 @@ COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
 # Esto instalará 'prisma' (porque ya lo moviste a dependencies)
 RUN pnpm install --prod --frozen-lockfile
 
-# GENERACIÓN DEL CLIENTE EN EL RUNNER
-# Esto asegura que el cliente exista y no sea borrado
-RUN npx prisma generate
+# Generamos solo para poder compilar el código TS
+RUN DATABASE_URL="postgresql://neondb_owner:npg_a2xuPpvod1YW@ep-crimson-heart-adx2a0il-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require" DIRECT_URL="postgresql://neondb_owner:npg_a2xuPpvod1YW@ep-crimson-heart-adx2a0il.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require" npx prisma generate
 
 # Copiamos el código compilado
 COPY --from=builder /app/dist ./dist
