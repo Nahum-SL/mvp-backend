@@ -5,17 +5,20 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from 'prisma/prisma.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { prismaAdp } from 'src/db';
+import { EmailService } from 'src/email/email.service';
 
+import { AuditService } from 'src/audit/audit.service';
+import { AuditActions } from 'src/audit/constants/audit-action';
 @Injectable()
 export class AuthService {
   constructor(
-    private prisma: PrismaService,
     private jwtService: JwtService,
+    private emailService: EmailService,
+    private auditService: AuditService,
   ) {}
 
   // --- REGISTRO DE USUARIOS ---
@@ -27,7 +30,7 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     try {
-      const user = await this.prisma.user.create({
+      const user = await prismaAdp.user.create({
         data: {
           email,
           password: hashedPassword,
@@ -54,39 +57,110 @@ export class AuthService {
   // --- LOGIN Y GENERACIÓN DE TOKEN ---
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
+    const user = await prismaAdp.user.findUnique({ where: { email } });
 
-    // 1. Buscar el usupario en Neon por email
-    const user = await prismaAdp.user.findUnique({
-      where: { email },
+    // CASO: Usuario no existe o contraseña incorrecta
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      await this.auditService.log(
+        AuditActions.LOGIN_FAILED,
+        'FAILED',
+        `Credenciales inválidas para: ${email}`,
+        { ip: '...', userAgent: '...' }, // Opcional: capturar datos del request
+      );
+      throw new UnauthorizedException('Credenciales incorrectas');
+    }
+
+    // --- LÓGICA DE SEGURIDAD PARA ROLES DE PODER ---
+    if (user.role === 'OWNER' || user.role === 'ADMIN') {
+      const generatedCode = Math.floor(
+        100000 + Math.random() * 900000,
+      ).toString();
+
+      // Guardar en DB con expiración
+      await prismaAdp.user.update({
+        where: { id: user.id },
+        data: {
+          twoFactorCode: await bcrypt.hash(generatedCode, 10),
+          twoFactorExpires: new Date(Date.now() + 5 * 60000),
+        },
+      });
+
+      // --- IMPLEMENTACIÓN DEL ENVÍO DE EMAIL ---
+      try {
+        // Llamamos al servicio de email que configuramos con Resend
+        await this.emailService.send2FACode(user.email, generatedCode);
+      } catch (error) {
+        // Si falla el envío de correo, notificamos pero no bloqueamos el flujo
+        // (aunque lo ideal es que el admin sepa que no llegó)
+        throw new InternalServerErrorException(
+          'Error al enviar el código de seguridad. Por favor, intente de nuevo. Detalles: ' +
+            error.message,
+        );
+      }
+
+      await this.auditService.log(
+        AuditActions.TWO_FACTOR_SENT,
+        'INFO',
+        `Código 2FA generado y enviado a ${email}`,
+      );
+
+      return {
+        requires2FA: true,
+        email: user.email,
+        message: 'Se ha enviado un código de verificación a tu correo.',
+      };
+    }
+  }
+
+  // Verificador de 2 pasos
+  async verify2FA(email: string, code: string) {
+    const user = await prismaAdp.user.findUnique({ where: { email } });
+
+    if (!user || !user.twoFactorCode || !user.twoFactorExpires) {
+      throw new UnauthorizedException(
+        'No hay un proceso de verificación activo.',
+      );
+    }
+
+    if (new Date() > user.twoFactorExpires) {
+      throw new UnauthorizedException(
+        'El código ha expirado. Solicite uno nuevo.',
+      );
+    }
+
+    const isCodeValid = await bcrypt.compare(code, user.twoFactorCode);
+    if (!isCodeValid) {
+      // LOG: Intento de 2FA fallido
+      await this.auditService.log(
+        AuditActions.LOGIN_FAILED,
+        'FAILED',
+        `Código 2FA incorrecto para ${email}`,
+      );
+      throw new UnauthorizedException('Código de verificación incorrecto.');
+    }
+
+    // LOG: Verificación exitosa
+    await this.auditService.log(
+      AuditActions.TWO_FACTOR_VERIFIED,
+      'SUCCESS',
+      `Login administrativo completado: ${email}`,
+    );
+
+    // Limpiar el código de la DB después de usarlo
+    await prismaAdp.user.update({
+      where: { id: user.id },
+      data: { twoFactorCode: null, twoFactorExpires: null },
     });
 
-    if (!user) {
-      throw new UnauthorizedException('Credenciales inválidas (Email)');
-    }
-
-    // 2. Comparar el password enviado con el hash almacenado
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Credenciales inválidas (Password)');
-    }
-
-    // 3. Generar el JWT (Contiene el ID y el ROL del usuario)
-    const payload = {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-    };
-
+    // Entregar el Token Final
+    const payload = { id: user.id, email: user.email, role: user.role };
     return {
       user: {
         id: user.id,
         name: user.name,
         email: user.email,
         role: user.role,
-        avatar: user.avatar,
       },
-      // Este es el token que Next.js guardará en una Cookie o LocalStorage
       backendToken: this.jwtService.sign(payload),
     };
   }

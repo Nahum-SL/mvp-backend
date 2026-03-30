@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { CategoryService } from './category.service';
-import { CreateCategoryDto } from './dto/categoy.dto';
+import { CreateCategoryDto } from './dto/create-categoy.dto';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('blog/category')

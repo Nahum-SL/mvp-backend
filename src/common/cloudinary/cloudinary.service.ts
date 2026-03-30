@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { v2 as cloudinary } from 'cloudinary';
+import {
+  v2 as cloudinary,
+  UploadApiErrorResponse,
+  UploadApiResponse,
+} from 'cloudinary';
 import * as streamifier from 'streamifier';
 
 // Cloudinary / Almacenara las imagenes pdf / Dandole uso en el plan gratuito
@@ -14,33 +18,57 @@ export class CloudinaryService {
     });
   }
 
-  async uploadFile(file: Express.Multer.File, folder: string): Promise<any> {
-    return new Promise((resolve, reject) => {
+  async uploadFile(
+    file: Express.Multer.File,
+    folder: string,
+  ): Promise<UploadApiResponse> {
+    if (!file) {
+      throw new Error('No se proporciono un archivo');
+    }
+
+    return new Promise<UploadApiResponse>((resolve, reject) => {
       const upload = cloudinary.uploader.upload_stream(
         { folder: `asescon/${folder}`, resource_type: 'auto' },
-        (error, result) => {
-          // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
-          if (error) return reject(error);
+        (
+          error: UploadApiErrorResponse | undefined,
+          result: UploadApiResponse | undefined,
+        ) => {
+          if (error) return reject(new Error(error.message));
+
+          if (!result) {
+            return reject(new Error('Upload failed: no result returned'));
+          }
+
           resolve(result);
         },
       );
+
       streamifier.createReadStream(file.buffer).pipe(upload);
     });
   }
-  async deleteFile(publicId: string) {
-    return await cloudinary.uploader.destroy(publicId);
+
+  async deleteFile(publicId: string): Promise<{ result: string }> {
+    return cloudinary.uploader.destroy(publicId);
   }
 
   // Helper para extraer el public_id de la URL de Cloudinary
+  // Para evitar fallos en subcarpetas o con versiones en la URL
   extractPublicId(url: string): string | null {
-    // Ejemplo: https://res.cloudinary.com/demo/image/upload/v1234/blog/nombre-imagen.jpg
-    // El public_id sería "blog/nombre-imagen"
-    const parts = url.split('/');
-    const fileName = parts.pop(); // nombre-imagen.jpg
-    const folder = parts.pop(); // blog
-    if (!fileName || !folder) return null;
+    try {
+      const urlObj = new URL(url);
+      const path = urlObj.pathname;
 
-    const [id] = fileName.split('.'); // nombre-imagen
-    return `${folder}/${id}`;
+      const parts = path.split('/');
+      const uploadIndex = parts.findIndex((p) => p === 'upload');
+
+      if (uploadIndex === -1) return null;
+
+      const publicIdWithVersion = parts.slice(uploadIndex + 2).join('/');
+      const publicId = publicIdWithVersion.replace(/\.[^/.]+$/, '');
+
+      return publicId;
+    } catch {
+      return null;
+    }
   }
 }

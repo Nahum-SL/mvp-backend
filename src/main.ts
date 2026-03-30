@@ -1,12 +1,15 @@
 import 'dotenv/config';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Logger } from '@nestjs/common'; // Añadimos Logger
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
+  const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
 
-  // IMPORTANTE: Habilita el cierre limpio de la app
+  // Prefijo para todas las rutas: http://tu-url.com/api/...
+  app.setGlobalPrefix('api');
+
   app.enableShutdownHooks();
 
   app.useGlobalPipes(
@@ -20,9 +23,17 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors();
+  // Configuración de CORS flexible
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+  app.enableCors({
+    origin: [frontendUrl, 'http://localhost:3000'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
 
-  await app.listen(3001);
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  const port = process.env.PORT || 3001;
+  await app.listen(port);
+
+  logger.log(`🚀 ASESCON API corriendo en: http://localhost:${port}/api`);
 }
 void bootstrap();

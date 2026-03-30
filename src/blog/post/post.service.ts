@@ -78,6 +78,18 @@ export class PostsService {
     }
   }
 
+  async delete(id: number) {
+    // 1. Buscamos el post para saber si existe y obtener la URL de la imagen
+    const post = await prismaAdp.post.findUnique({ where: { id } });
+    if (!post) throw new Error('Post no encontrado');
+
+    // 2. Borramos de la base de datos
+    await prismaAdp.post.delete({ where: { id } });
+
+    // Retornamos el post completo por si el controlador necesita la URL de la imagen para borrarla de Cloudinary
+    return post;
+  }
+
   // Añadimos este para la tabla del Admin en Next.js
   async findAllAdmin() {
     return await prismaAdp.post.findMany({

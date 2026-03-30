@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { PrismaModule } from 'prisma/prisma.module';
 import { UneteModule } from './unete/unete.module';
 import { IntranetModule } from './intranet/intranet.module';
@@ -9,9 +10,10 @@ import { CategoryModule } from './blog/category/category.module';
 import { CloudinaryModule } from './common/cloudinary/cloudinary.module';
 import { AdminModule } from './admin/admin.module';
 import { ServicioModule } from './servicios/servicio.module';
-
+import { AuditModule } from './audit/audit.module';
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     // Prisma
     PrismaModule,
     // Admin
@@ -31,6 +33,8 @@ import { ServicioModule } from './servicios/servicio.module';
     UneteModule,
     // Servicio
     ServicioModule,
+    // Auditoría
+    AuditModule,
   ],
 })
 export class AppModule {}

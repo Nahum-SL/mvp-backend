@@ -2,79 +2,57 @@ import { prismaAdp } from 'src/db';
 import * as bcrypt from 'bcrypt';
 
 async function main() {
-  console.log('Iniciando el proceso de seeding...');
+  console.log('🚀 Iniciando el proceso de seeding...');
 
-  // 1. Limpiar datos previos (Opcional, ten cuidado en producción)
-  // await prismaAdp.userpnpm.deleteMany();
-  // await prismaAdp.category.deleteMany();
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPass = process.env.ADMIN_PASSWORD;
+  const adminName = process.env.ADMIN_NAME || 'Dev Admin';
 
-  // 2. Crear Usuario Admin
-  const adminPassword = 'A*-DM-*pssw**_137_*902'; // Contraseña del Admin
-  const hashedPassword = await bcrypt.hash(adminPassword, 10);
+  // 1. Configuración de Passwords (Usa variables de entorno en prod si es posible)
+  if (!adminEmail || !adminPass) {
+    throw new Error('❌ Faltan variables de entorno en el .env');
+  }
 
-  const admin = await prismaAdp.user.upsert({
-    where: { email: 'admin@asescon.pe' },
-    update: {},
+  // 2. Crear TU CUENTA como Desarrollador / Admin
+  const myHashedPassword = await bcrypt.hash(adminPass, 10);
+
+  const devAccount = await prismaAdp.user.upsert({
+    where: { email: adminEmail }, // Cambia esto por tu correo real
+    update: { role: 'ADMIN' }, // Por si ya existía, aseguras el rol
     create: {
-      email: 'admin@asescon.pe',
-      name: 'Administrador General',
-      password: hashedPassword,
+      email: adminEmail,
+      name: adminName,
+      password: myHashedPassword,
       role: 'ADMIN',
       avatar:
-        'https://ui-avatars.com/api/?name=Admin+Asescon&background=0D8ABC&color=fff',
+        'https://ui-avatars.com/api/?name=Dev+Admin&background=1e293b&color=fff',
     },
   });
+  console.log(`✅ Cuenta de Desarrollador activa: ${devAccount.email}`);
 
-  console.log(`:) Usuario Admin creado: ${admin.email}`);
+  // 3. Crear Cuenta de la Empresa (ADMIN por ahora, será OWNER después)
+  // const clientHashedPassword = await bcrypt.hash('BienvenidoAsescon2026!', 10);
 
-  // 3. Crear Categorías para el Blog
-  const categories = [
-    { name: 'Tributario', slug: 'tributario' },
-    { name: 'Laboral', slug: 'laboral' },
-    { name: 'Contabilidad', slug: 'contabilidad' },
-    { name: 'Actualidad', slug: 'actualidad' },
-  ];
-
-  for (const cat of categories) {
-    await prismaAdp.category.upsert({
-      where: { slug: cat.slug },
-      update: { name: cat.name },
-      create: cat,
-    });
-  }
-  console.log('✅ Categorías de blog inicializadas.');
-
-  // 4. Crear Links base para la Intranet
-  const links = [
-    {
-      title: 'Portal SUNAT',
-      description: 'Acceso directo para trámites y declaraciones.',
-      url: 'https://www.sunat.gob.pe/',
-      icon: 'sunat-icon',
-      order: 1,
-    },
-    {
-      title: 'Consulta RUC',
-      description: 'Verificación de estado de contribuyentes.',
-      url: 'https://e-consultaruc.sunat.gob.pe/',
-      icon: 'search-icon',
-      order: 2,
-    },
-  ];
-
-  for (const link of links) {
-    await prismaAdp.intranetLink.create({
-      data: link,
-    });
-  }
-  console.log(':) Links de intranet configurados.');
-
-  console.log(':) Seeding completado con éxito.');
+  // const companyAccount = await prismaAdp.user.upsert({
+  //   where: { email: 'admin@asescon.pe' },
+  //   update: {},
+  //   create: {
+  //     email: 'admin@asescon.pe',
+  //     name: 'Gerencia ASESCON',
+  //     password: clientHashedPassword,
+  //     role: 'ADMIN', // Cambiarás a 'OWNER' el día de la entrega
+  //     avatar:
+  //       'https://ui-avatars.com/api/?name=Asescon+Gerencia&background=0D8ABC&color=fff',
+  //   },
+  // });
+  // console.log(
+  //   `✅ Cuenta de Empresa (Pre-Entrega) creada: ${companyAccount.email}`,
+  // );
 }
 
 main()
   .catch((e) => {
-    console.error(':( Error en el seeding:', e);
+    console.error('❌ Error en el seeding:', e);
     process.exit(1);
   })
   .finally(async () => {

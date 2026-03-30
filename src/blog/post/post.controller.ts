@@ -9,6 +9,7 @@ import {
   UseGuards,
   Req,
   Param,
+  Delete,
   NotFoundException,
   BadRequestException,
 } from '@nestjs/common';
@@ -91,6 +92,38 @@ export class PostsController {
     }
 
     return this.postsService.update(postId, updatePostDto, imageUrl);
+  }
+
+  //Borrar
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    const postId = Number(id);
+
+    if (isNaN(postId)) {
+      throw new BadRequestException('ID no válido');
+    }
+
+    // 1. Ejecutamos el borrado en el servicio
+    const deletedPost = await this.postsService.delete(postId);
+
+    // 2. Si tenía imagen, la borramos de Cloudinary
+    if (deletedPost.image) {
+      try {
+        const publicId = this.cloudinaryService.extractPublicId(
+          deletedPost.image,
+        );
+        if (publicId) {
+          await this.cloudinaryService.deleteFile(publicId);
+        }
+      } catch (error) {
+        // Logeamos el error pero no detenemos la respuesta,
+        // ya que el post en DB ya se borró.
+        console.error('Error borrando imagen de Cloudinary:', error);
+      }
+    }
+
+    return { success: true, message: 'Post eliminado correctamente' };
   }
 
   @Get('admin') // Podrías crear una ruta específica para el admin

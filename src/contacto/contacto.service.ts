@@ -6,9 +6,11 @@ import {
 import { prismaAdp } from 'src/db';
 import { CreateContactoDto } from './dto/create-contact.dto';
 import { ContactStatus } from 'generated/prisma/enums';
+import { AuditService } from 'src/audit/audit.service';
 
 @Injectable()
 export class ContactoService {
+  constructor(private auditService: AuditService) {}
   // Público: Registro desde el Landing Page
   async create(createContactoDto: CreateContactoDto) {
     try {
@@ -19,6 +21,11 @@ export class ContactoService {
         },
       });
     } catch (error) {
+      await this.auditService.log(
+        'ERROR',
+        `Error al guardar contacto de ${createContactoDto.email}`,
+        error.message,
+      );
       throw new InternalServerErrorException(
         'Error al registrar el contacto: ' + error.message,
       );

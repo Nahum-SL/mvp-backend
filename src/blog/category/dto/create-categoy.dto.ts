@@ -9,5 +9,3 @@ export class CreateCategoryDto {
   @IsOptional()
   slug?: string;
 }
-
-export class UpdateCategoryDto extends CreateCategoryDto {}

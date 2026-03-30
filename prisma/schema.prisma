@@ -10,44 +10,14 @@ datasource db {
 // --- SEGURIDAD Y USUARIOS ---
 
 enum Role {
+  OWNER
   ADMIN
   COLABORADOR
   CLIENTE
 }
 
-// --- SISTEMA DE DIAGNÓSTICO (RADAR DE CONTINGENCIAS) ---
 
-enum RiskLevel {
-  BAJO // Verde
-  MEDIO // Amarillo
-  ALTO // Rojo
-  CRITICO // Dark Red/Black
-}
-
-model BusinessDiagnostic {
-  id          String  @id @default(cuid())
-  companyName String?
-  ruc         String? @db.VarChar(11)
-  contactName String
-  email       String
-  phone       String  @db.VarChar(15)
-
-  // Guardamos las respuestas exactas { "tax": true, "labor": false, ... }
-  responses Json
-
-  // Resultados calculados por el backend de NestJS
-  score       Int // 0-100
-  overallRisk RiskLevel @default(MEDIO)
-
-  // Para trazabilidad: ¿Desde qué herramienta o post vino?
-  source String? @default("radar_general")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("business_diagnostics")
-}
-
+// Por el momento USER es el Administrador
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -56,8 +26,23 @@ model User {
   role      Role     @default(CLIENTE)
   avatar    String?
   posts     Post[] // Relación con el Blog (si es autor)
+
+  twoFactorCode     String?   // El código de 6 dígitos
+  twoFactorExpires  DateTime? // Cuándo vence (ej. en 5 minutos)
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// -- AUDITORÍA Y LOGS --
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String   // Ejemplo: "LOGIN_ATTEMPT", "2FA_SENT", "DB_ERROR"
+  status    String   // "SUCCESS", "FAILED", "INFO"
+  message   String   // "Intento de login fallido para el correo admin@..."
+  metadata  Json?    // Para guardar el IP, el navegador o el ID del usuario
+  createdAt DateTime @default(now())
 }
 
 // --- ESTADOS (De los formularios) ---
@@ -97,6 +82,7 @@ model Category {
 model Post {
   id          Int     @id @default(autoincrement())
   title       String
+  subtitle    String? // Opcional
   slug        String  @unique
   content     String  @db.Text
   excerpt     String  @db.VarChar(255)
@@ -184,4 +170,37 @@ model ServiceFeature {
   service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
 
   @@map("service_features")
+}
+
+// --- SISTEMA DE DIAGNÓSTICO (RADAR DE CONTINGENCIAS) ---
+
+enum RiskLevel {
+  BAJO // Verde
+  MEDIO // Amarillo
+  ALTO // Rojo
+  CRITICO // Dark Red/Black
+}
+
+model BusinessDiagnostic {
+  id          String  @id @default(cuid())
+  companyName String?
+  ruc         String? @db.VarChar(11)
+  contactName String
+  email       String
+  phone       String  @db.VarChar(15)
+
+  // Guardamos las respuestas exactas { "tax": true, "labor": false, ... }
+  responses Json
+
+  // Resultados calculados por el backend de NestJS
+  score       Int // 0-100
+  overallRisk RiskLevel @default(MEDIO)
+
+  // Para trazabilidad: ¿Desde qué herramienta o post vino?
+  source String? @default("radar_general")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("business_diagnostics")
 }

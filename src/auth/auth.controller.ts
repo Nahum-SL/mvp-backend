@@ -6,11 +6,16 @@ import {
   HttpStatus,
   UseGuards,
   Get,
-  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { AuthGuard } from '@nestjs/passport';
+// Roles
+import { RolesGuard } from './guards/roles.guard';
+import { Roles } from './decorators/role.decorator';
+import { Role } from 'generated/prisma/enums';
+
+import { Verify2faDto } from './dto/verify2.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -22,14 +27,26 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
-  // Ruta de prueba para verificar que el Token funciona
-  @UseGuards(AuthGuard('jwt'))
-  @Get('profile')
-  getProfile(@Req() req) {
-    // Gracias a la JwtStrategy, los datos del usuario están en req.user
-    return {
-      message: 'Acceso concedido a la Intranet',
-      user: req.user,
-    };
+  // EJEMPLO 1: Ruta solo para OWNER (Configuraciones críticas)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.OWNER)
+  @Get('owner-only')
+  getOwnerData() {
+    return { message: 'Bienvenido, Gerencia General.' };
+  }
+
+  // EJEMPLO 2: Ruta para ADMIN o OWNER (Gestión de Blog/Servicios)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.OWNER, Role.ADMIN)
+  @Get('admin-dashboard')
+  getAdminData() {
+    return { message: 'Acceso al panel de control administrativo.' };
+  }
+
+  // --- AÑADE ESTA RUTA ---
+  @Post('verify-2fa')
+  @HttpCode(HttpStatus.OK)
+  async verify2FA(@Body() body: Verify2faDto) {
+    return this.authService.verify2FA(body.email, body.code);
   }
 }

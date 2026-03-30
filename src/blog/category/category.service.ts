@@ -1,6 +1,6 @@
 import { Injectable, ConflictException } from '@nestjs/common';
 import { prismaAdp } from 'src/db';
-import { CreateCategoryDto } from './dto/categoy.dto';
+import { CreateCategoryDto } from './dto/create-categoy.dto';
 import slugify from 'slugify'; // Opcional: pnpm add slugify
 
 @Injectable()
