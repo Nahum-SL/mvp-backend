@@ -98,12 +98,6 @@
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
   },
-  "pnpm": {
-    "patchedDependencies": {},
-    "hoistPattern": [
-      "*prisma*"
-    ]
-  },
   "engines": {
     "node": ">=22.0.0"
   }

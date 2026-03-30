@@ -1,44 +1,29 @@
-# 1. Etapa de Construcción (Builder)
-FROM node:22-alpine AS builder
+FROM node:22-alpine
 WORKDIR /app
-RUN apk add --no-cache libc6-compat
+
+# Instalamos pnpm
 RUN npm install -g pnpm
 
-COPY package.json pnpm-lock.yaml* ./
+# Copiamos archivos de configuración (INCLUYENDO el nuevo .npmrc)
+COPY package.json pnpm-lock.yaml* .npmrc ./
+
+# Instalamos todas las dependencias
 RUN pnpm install --frozen-lockfile
 
+# Copiamos el resto del código de ASESCON
 COPY . .
 
-# Generamos con variables dummy para que NestJS pueda compilar (Build)
+# Generamos el cliente de Prisma
+# Usamos URLs dummy; Railway usará las reales al arrancar
 RUN DATABASE_URL="postgresql://neondb_owner:npg_a2xuPpvod1YW@ep-crimson-heart-adx2a0il-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require" \
     DIRECT_URL="postgresql://neondb_owner:npg_a2xuPpvod1YW@ep-crimson-heart-adx2a0il.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require" \
     pnpm exec prisma generate
 
+# Compilamos el proyecto de NestJS
 RUN pnpm run build
-
-# 2. Etapa de Ejecución (Runner)
-FROM node:22-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV=production
-
-RUN npm install -g pnpm
-
-# Copiamos archivos necesarios
-COPY --from=builder /app/package.json /app/pnpm-lock.yaml* ./
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/prisma.config.ts ./prisma.config.ts
-COPY --from=builder /app/dist ./dist
-
-# Instalamos solo prod (pnpm limpia node_modules aquí)
-RUN pnpm install --prod --frozen-lockfile
-
-# 👇 LA CLAVE: Generar el cliente JUSTO después de instalar prod
-# Usamos 'pnpm exec' en lugar de 'npx' para asegurar que use el binario local
-RUN DATABASE_URL="postgresql://neondb_owner:npg_a2xuPpvod1YW@ep-crimson-heart-adx2a0il-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require" \
-    DIRECT_URL="postgresql://neondb_owner:npg_a2xuPpvod1YW@ep-crimson-heart-adx2a0il.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require" \
-    pnpm exec prisma generate
 
 EXPOSE 3001
 
-# Comando final: Railway inyectará las variables REALES aquí
+# Comando final: Migraciones + Iniciar App
+# Aquí es donde Railway mete las variables reales de Neon
 CMD ["sh", "-c", "npx prisma migrate deploy && node dist/src/main.js"]
