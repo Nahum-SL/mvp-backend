@@ -1,7 +1,7 @@
 // src/intranet/intranet.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
-import { Role } from 'generated/prisma/enums';
+import { Role } from '@prisma/client';
 import { CreateLinkDto } from './dto/create-link.dto';
 import { UpdateLinkDto } from './dto/update-link.dto';
 

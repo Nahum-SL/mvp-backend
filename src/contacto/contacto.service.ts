@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { prismaAdp } from 'src/db';
 import { CreateContactoDto } from './dto/create-contact.dto';
-import { ContactStatus } from 'generated/prisma/enums';
+import { ContactStatus } from '@prisma/client';
 import { AuditService } from 'src/audit/audit.service';
 
 @Injectable()

@@ -13,7 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 // Roles
 import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/role.decorator';
-import { Role } from 'generated/prisma/enums';
+import { Role } from '@prisma/client';
 
 import { Verify2faDto } from './dto/verify2.dto';
 

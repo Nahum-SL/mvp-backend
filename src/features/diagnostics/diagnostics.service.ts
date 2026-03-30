@@ -1,6 +1,6 @@
 // src/features/diagnostics/diagnostics.service.ts
 import { Injectable } from '@nestjs/common';
-import { RiskLevel } from 'generated/prisma/enums';
+import { RiskLevel } from '@prisma/client';
 import { prismaAdp } from 'src/db';
 import { CreateDiagnosticDto } from './dto/create-diagnostic.dto';
 
