@@ -1,0 +1,25 @@
+# Dependencias
+node_modules
+npm-debug.log*
+pnpm-debug.log*
+
+# Builds
+dist
+build
+.next
+
+# Docker
+docker-compose.yml
+.dockerignore
+
+# Entorno y Secretos
+.env
+.env.local
+.env.production
+
+# Git
+.git
+.gitignore
+
+# Documentación
+README.md
