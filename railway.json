@@ -1,0 +1,10 @@
+{
+  "build": {
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "Dockerfile"
+  },
+  "deploy": {
+    "startCommand": "npx prisma migrate deploy && node dist/main",
+    "restartPolicyType": "ON_FAILURE"
+  }
+}
