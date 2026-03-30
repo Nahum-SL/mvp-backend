@@ -1,5 +1,5 @@
 # 1. Etapa de Construcción (Builder)
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 RUN apk add --no-cache libc6-compat
 RUN npm install -g pnpm
@@ -17,7 +17,7 @@ RUN DATABASE_URL="postgresql://neondb_owner:npg_a2xuPpvod1YW@ep-crimson-heart-ad
 RUN pnpm run build
 
 # 2. Etapa de Ejecución (Runner)
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
