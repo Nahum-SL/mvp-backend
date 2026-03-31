@@ -3,72 +3,45 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider = "postgresql"
 }
 
-// --- SEGURIDAD Y USUARIOS ---
-
-enum Role {
-  OWNER
-  ADMIN
-  COLABORADOR
-  CLIENTE
-}
-
-// Por el momento USER es el Administrador
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
-  password String // Hash de la contraseña
-  name     String
-  role     Role    @default(CLIENTE)
-  avatar   String?
-  posts    Post[] // Relación con el Blog (si es autor)
-
-  twoFactorCode    String? // El código de 6 dígitos
-  twoFactorExpires DateTime? // Cuándo vence (ej. en 5 minutos)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String    @id @default(uuid())
+  email            String    @unique
+  password         String
+  name             String
+  role             Role      @default(CLIENTE)
+  avatar           String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  twoFactorCode    String?
+  twoFactorExpires DateTime?
+  posts            Post[]
 }
-
-// -- AUDITORÍA Y LOGS --
 
 model AuditLog {
   id        String   @id @default(cuid())
-  action    String // Ejemplo: "LOGIN_ATTEMPT", "2FA_SENT", "DB_ERROR"
-  status    String // "SUCCESS", "FAILED", "INFO"
-  message   String // "Intento de login fallido para el correo admin@..."
-  metadata  Json? // Para guardar el IP, el navegador o el ID del usuario
+  action    String
+  status    String
+  message   String
+  metadata  Json?
   createdAt DateTime @default(now())
 }
 
-// --- ESTADOS (De los formularios) ---
-
-enum ContactStatus {
-  PENDING
-  CONFIRMED
-  CANCELLED
-  COMPLETED
-}
-
-// --- CONTACTO (Envio de formulario)
-
 model Contacto {
-  id         String        @id @default(cuid()) // <-- Cambiado a cuid()
-  name       String
+  id         String        @id @default(cuid())
   email      String
-  telefono   String        @db.VarChar(15) // Longitud 15 por prefijos internacionales (+51...)
+  telefono   String        @db.VarChar(15)
   fechaNac   DateTime
-  comentario String?       @db.Text // @db.Text permite textos largos
-  status     ContactStatus @default(PENDING) // Estado inicial por defecto
+  comentario String?
+  status     ContactStatus @default(PENDING)
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
+  name       String
 
   @@map("contactos")
 }
-
-// --- SISTEMA DE BLOG ---
 
 model Category {
   id    Int    @id @default(autoincrement())
@@ -78,85 +51,63 @@ model Category {
 }
 
 model Post {
-  id          Int     @id @default(autoincrement())
   title       String
-  subtitle    String? // Opcional
-  slug        String  @unique
-  content     String  @db.Text
-  excerpt     String  @db.VarChar(255)
-  image       String? // URL de la imagen (Cloudinary/S3)
-  published   Boolean @default(false)
-  readingTime Int     @default(5)
-
-  authorId String
-  author   User   @relation(fields: [authorId], references: [id])
-
-  categoryId Int
-  category   Category @relation(fields: [categoryId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-// --- SECCIÓN ÚNETE (RECURSOS HUMANOS) ---
-
-// JobApplicationStatus 
-enum JobAppStatus {
-  PENDIENTE
-  REVISADO
-  RECHAZADO
+  slug        String   @unique
+  excerpt     String   @db.VarChar(255)
+  content     String
+  image       String?
+  published   Boolean  @default(false)
+  readingTime Int      @default(5)
+  authorId    String
+  categoryId  Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  author      User     @relation(fields: [authorId], references: [id])
+  category    Category @relation(fields: [categoryId], references: [id])
 }
 
 model JobApplication {
-  id         String       @id @default(cuid()) // <-- Cambiado a cuid()
+  id         String       @id @default(cuid())
   fullName   String
   dni        String       @unique
   age        Int
   email      String
   phone      String
-  experience Int // Años
-  position   String // Puesto de interés
-  cvUrl      String // URL del PDF en la nube
-  status     JobAppStatus @default(PENDIENTE) // PENDIENTE, REVISADO, RECHAZADO
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  experience Int
+  position   String
+  cvUrl      String
+  createdAt  DateTime     @default(now())
+  status     JobAppStatus @default(PENDIENTE)
+  updatedAt  DateTime     @updatedAt
 }
 
-// --- SISTEMA DE INTRANET (LINKS DINÁMICOS) ---
-
 model IntranetLink {
-  id          Int     @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   title       String
   description String
   url         String
-  icon        String? // Nombre del icono o URL
-  order       Int     @default(0) // Para ordenar las cards en el dashboard
-  isVisible   Boolean @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  icon        String?
+  order       Int      @default(0)
+  isVisible   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
-// --- SISTEMA DE SERVICIOS ---
-
 model Service {
-  id            Int      @id @default(autoincrement())
+  id            Int              @id @default(autoincrement())
   title         String
-  slug          String   @unique
-  description   String   @db.Text
-  icon          String? // Nombre del icono de Lucide
-  image         String? // URL de la imagen almacenada en Cloudinary
-  // Para el selector inteligente
-  businessTypes String[] // ['mype', 'startup', 'corporativo']
-  painPoints    String[] // ['impuestos', 'legal', 'planillas']
-
-  features  ServiceFeature[]
-  isVisible Boolean          @default(true)
-  order     Int              @default(0)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  slug          String           @unique
+  description   String
+  icon          String?
+  businessTypes String[]
+  painPoints    String[]
+  isVisible     Boolean          @default(true)
+  order         Int              @default(0)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  image         String?
+  features      ServiceFeature[]
 
   @@map("services")
 }
@@ -170,35 +121,46 @@ model ServiceFeature {
   @@map("service_features")
 }
 
-// --- SISTEMA DE DIAGNÓSTICO (RADAR DE CONTINGENCIAS) ---
-
-enum RiskLevel {
-  BAJO // Verde
-  MEDIO // Amarillo
-  ALTO // Rojo
-  CRITICO // Dark Red/Black
-}
-
 model BusinessDiagnostic {
-  id          String  @id @default(cuid())
+  id          String    @id @default(cuid())
   companyName String?
-  ruc         String? @db.VarChar(11)
+  ruc         String?   @db.VarChar(11)
   contactName String
   email       String
-  phone       String  @db.VarChar(15)
-
-  // Guardamos las respuestas exactas { "tax": true, "labor": false, ... }
-  responses Json
-
-  // Resultados calculados por el backend de NestJS
-  score       Int // 0-100
+  phone       String    @db.VarChar(15)
+  responses   Json
+  score       Int
   overallRisk RiskLevel @default(MEDIO)
-
-  // Para trazabilidad: ¿Desde qué herramienta o post vino?
-  source String? @default("radar_general")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  source      String?   @default("radar_general")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@map("business_diagnostics")
+}
+
+enum Role {
+  ADMIN
+  COLABORADOR
+  CLIENTE
+  OWNER
+}
+
+enum ContactStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum JobAppStatus {
+  PENDIENTE
+  REVISADO
+  RECHAZADO
+}
+
+enum RiskLevel {
+  BAJO
+  MEDIO
+  ALTO
+  CRITICO
 }
