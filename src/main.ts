@@ -23,11 +23,28 @@ async function bootstrap() {
     }),
   );
 
-  // Configuración de CORS flexible
-  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+  // Configuración de CORS Dinámica y Flexible
   app.enableCors({
-    origin: [frontendUrl, 'http://localhost:3000'],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        process.env.FRONTEND_URL,
+        'http://localhost:3000',
+        'http://localhost:3001',
+      ];
+
+      // Lógica: Permitir si no hay origen (Postman/Server),
+      // si está en la lista oficial, o si termina en .vercel.app
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        origin.endsWith('.vercel.app')
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error('Bloqueado por política CORS de ASESCON'));
+      }
+    },
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
 
