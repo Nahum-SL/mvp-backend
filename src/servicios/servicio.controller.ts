@@ -29,6 +29,15 @@ export class ServicioController {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
+  @Get('recommendation')
+  getRecommendation(@Query() query: RecommendationQueryDto) {
+    return this.servicioService.getRecommendation({
+      businessType: query.businessType,
+      painPoint: query.painPoint,
+      search: query.search,
+    });
+  }
+
   // PRIVADO: Solo admin puede crear
   @UseGuards(AuthGuard('jwt'))
   @Post()
@@ -104,14 +113,6 @@ export class ServicioController {
     return this.servicioService.remove(serviceId);
   }
 
-  @Get('recommendation')
-  getRecommendation(@Query() query: RecommendationQueryDto) {
-    return this.servicioService.getRecommendation({
-      businessType: query.businessType,
-      painPoint: query.painPoint,
-      search: query.search,
-    });
-  }
   // Obtener por id
   @Get(':id')
   async findOneById(@Param('id') id: string) {
