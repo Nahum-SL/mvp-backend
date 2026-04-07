@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuditService } from './audit.service';
-import { AuditQueryDto } from './audit-query';
+import { AuditQueryDto } from './dto/audit-query';
 import { AuthGuard } from '@nestjs/passport';
 
 @Controller('audit')

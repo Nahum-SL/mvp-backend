@@ -12,16 +12,16 @@ import { Role } from '@prisma/client';
 export class RegisterDto {
   @IsEmail({}, { message: 'El formato del correo es inválido ' })
   @IsNotEmpty({ message: 'El correo es obligatorio ' })
-  email: string;
+  email!: string;
 
   @IsString()
   @IsNotEmpty({ message: 'La contraseña es obligatoria ' })
   @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres' })
-  password: string;
+  password!: string;
 
   @IsString()
   @IsNotEmpty({ message: 'El nombre es obligatorio ' })
-  name: string;
+  name!: string;
 
   @IsEnum(Role, { message: 'EL rol proporcionado no es valido' })
   @IsOptional()

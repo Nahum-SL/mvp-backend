@@ -11,6 +11,7 @@ import { CloudinaryModule } from './common/cloudinary/cloudinary.module';
 import { AdminModule } from './admin/admin.module';
 import { ServicioModule } from './servicios/servicio.module';
 import { AuditModule } from './audit/audit.module';
+import { RecommendationModule } from './servicios/recommendation/recommendation.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -33,6 +34,7 @@ import { AuditModule } from './audit/audit.module';
     UneteModule,
     // Servicio
     ServicioModule,
+    RecommendationModule,
     // Auditoría
     AuditModule,
   ],

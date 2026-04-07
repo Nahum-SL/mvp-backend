@@ -13,15 +13,15 @@ export class CreateServicioDto {
   @IsString()
   @IsNotEmpty()
   @MinLength(5)
-  title: string;
+  title!: string;
 
   @IsString()
   @IsNotEmpty()
-  slug: string;
+  slug!: string;
 
   @IsString()
   @IsNotEmpty()
-  description: string;
+  description!: string;
 
   @IsString()
   @IsOptional()
@@ -34,7 +34,7 @@ export class CreateServicioDto {
     if (Array.isArray(value)) return value;
     return value ? [value] : [];
   })
-  businessTypes: string[];
+  businessTypes!: string[];
 
   @IsArray()
   @IsString({ each: true })
@@ -42,7 +42,7 @@ export class CreateServicioDto {
     if (Array.isArray(value)) return value;
     return value ? [value] : [];
   })
-  painPoints: string[];
+  painPoints!: string[];
 
   @IsArray()
   @IsString({ each: true })

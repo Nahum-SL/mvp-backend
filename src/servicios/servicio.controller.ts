@@ -20,6 +20,7 @@ import { CloudinaryService } from 'src/common/cloudinary/cloudinary.service';
 // Acciones
 import { CreateServicioDto } from './dto/create-servicio.dto';
 import { UpdateServicioDto } from './dto/update-servicio.dto';
+import { RecommendationQueryDto } from './recommendation/dto/recommendation-query.dto';
 
 @Controller('/servicio')
 export class ServicioController {
@@ -101,6 +102,15 @@ export class ServicioController {
 
     // 2. Borrar de la DB
     return this.servicioService.remove(serviceId);
+  }
+
+  @Get('recommendation')
+  getRecommendation(@Query() query: RecommendationQueryDto) {
+    return this.servicioService.getRecommendation({
+      businessType: query.businessType,
+      painPoint: query.painPoint,
+      search: query.search,
+    });
   }
 
   @Get('admin') // Podrías crear una ruta específica para el admin

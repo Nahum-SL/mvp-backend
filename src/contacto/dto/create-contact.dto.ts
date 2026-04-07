@@ -10,25 +10,25 @@ import {
 export class CreateContactoDto {
   @IsString()
   @IsNotEmpty({ message: 'El nombre es requerido' })
-  name: string;
+  name!: string;
 
   @IsEmail({}, { message: 'El correo electrónico no es válido' })
   @IsNotEmpty()
-  email: string;
+  email!: string;
 
   @IsString()
   @IsNotEmpty()
   @Matches(/^\+?[0-9]{9,15}$/, {
     message: 'El teléfono debe tener entre 9 y 15 dígitos (puede incluir +51)',
   })
-  telefono: string;
+  telefono!: string;
 
   @IsDateString(
     {},
     { message: 'La fecha de nacimiento debe ser una fecha válida' },
   )
   @IsNotEmpty()
-  fechaNac: string;
+  fechaNac!: string;
 
   @IsString()
   @IsOptional()

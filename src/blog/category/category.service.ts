@@ -14,7 +14,9 @@ export class CategoryService {
         data: { ...dto, slug },
       });
     } catch (error) {
-      if (error.code === 'P2002') {
+      const message =
+        error instanceof Error ? error.message : 'Error desconocido';
+      if (message === 'P2002') {
         throw new ConflictException('La categoría o el slug ya existen');
       }
       throw error;

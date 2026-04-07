@@ -12,7 +12,7 @@ import {
 export class CreateDiagnosticDto {
   @IsString()
   @IsNotEmpty({ message: 'El nombre de contacto es obligatorio' })
-  contactName: string;
+  contactName!: string;
 
   @IsString()
   @IsOptional()
@@ -24,18 +24,18 @@ export class CreateDiagnosticDto {
   ruc?: string;
 
   @IsEmail({}, { message: 'El formato del correo es inválido' })
-  email: string;
+  email!: string;
 
   @IsString()
   @IsNotEmpty()
   @IsPhoneNumber()
   @Length(9, 15)
-  phone: string;
+  phone!: string;
 
   @IsObject()
   @IsNotEmpty()
   // Aquí recibimos { tax: boolean, labor: boolean, etc. }
-  responses: Record<string, boolean>;
+  responses!: Record<string, boolean>;
 
   @IsString()
   @IsOptional()

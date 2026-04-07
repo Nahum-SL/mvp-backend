@@ -2,9 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { prismaAdp } from 'src/db';
 import { CreateServicioDto } from './dto/create-servicio.dto';
 import { UpdateServicioDto } from './dto/update-servicio.dto';
+import { RecommendationService } from './recommendation/recommendation.service';
 
+import { ServiceFilters } from './recommendation/type';
 @Injectable()
 export class ServicioService {
+  constructor(private recommendationService: RecommendationService) {}
+
   async create(createServicioDto: CreateServicioDto, imageUrl?: string) {
     // 1. Extraemos features y limpiamos los datos que vienen del FormData
     const { features, ...data } = createServicioDto;
@@ -135,5 +139,14 @@ export class ServicioService {
       },
       orderBy: { createdAt: 'desc' },
     });
+  }
+
+  async getRecommendation(filters: ServiceFilters) {
+    const services = await prismaAdp.service.findMany({
+      where: { isVisible: true },
+      include: { features: true },
+    });
+
+    return this.recommendationService.buildRecommendation(services, filters);
   }
 }

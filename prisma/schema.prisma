@@ -106,7 +106,7 @@ model Service {
   order         Int              @default(0)
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
-  image         String?
+  image         String
   features      ServiceFeature[]
 
   @@map("services")
@@ -121,6 +121,7 @@ model ServiceFeature {
   @@map("service_features")
 }
 
+// --- IGNORAR (NO ESTA EN USO) ---
 model BusinessDiagnostic {
   id          String    @id @default(cuid())
   companyName String?
@@ -138,10 +139,11 @@ model BusinessDiagnostic {
   @@map("business_diagnostics")
 }
 
+// --- EN USO SOLO (ADMIN - OWNER)
 enum Role {
   ADMIN
   COLABORADOR
-  CLIENTE
+  CLIENTE 
   OWNER
 }
 
@@ -158,6 +160,7 @@ enum JobAppStatus {
   RECHAZADO
 }
 
+// --- IGNORAR ---
 enum RiskLevel {
   BAJO
   MEDIO

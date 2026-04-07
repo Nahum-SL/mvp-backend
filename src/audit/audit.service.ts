@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { prismaAdp } from 'src/db';
-import { AuditQueryDto } from './audit-query';
+import { AuditQueryDto } from './dto/audit-query';
 
 @Injectable()
 export class AuditService {
@@ -56,10 +56,9 @@ export class AuditService {
         `Limpieza completada. Se eliminaron ${deleted.count} registros.`,
       );
     } catch (error) {
-      this.logger.error(
-        'Error en la limpieza automática de logs:',
-        error.message,
-      );
+      const message =
+        error instanceof Error ? error.message : 'Error desconocido';
+      this.logger.error(`Error en la limpieza automática de logs: ${message}`);
     }
   }
 

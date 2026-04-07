@@ -21,13 +21,15 @@ export class ContactoService {
         },
       });
     } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Error desconocido';
       await this.auditService.log(
         'ERROR',
         `Error al guardar contacto de ${createContactoDto.email}`,
-        error.message,
+        message,
       );
       throw new InternalServerErrorException(
-        'Error al registrar el contacto: ' + error.message,
+        `Error al registrar el contacto: ${message}`,
       );
     }
   }

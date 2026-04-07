@@ -7,5 +7,5 @@ export class UpdateContactStatusDto {
     message: 'El estado debe ser PENDING, CONFIRMED, CANCELLED o COMPLETED',
   })
   @IsNotEmpty()
-  status: ContactStatus;
+  status!: ContactStatus;
 }

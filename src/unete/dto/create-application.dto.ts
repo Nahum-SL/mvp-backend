@@ -4,27 +4,27 @@ import { Type } from 'class-transformer';
 export class CreateApplicationDto {
   @IsString()
   @IsNotEmpty()
-  fullName: string;
+  fullName!: string;
 
   @IsString()
   @IsNotEmpty()
-  dni: string;
+  dni!: string;
 
   @Type(() => Number) // Convierte el string del form-data a número
   @IsInt()
   @Min(18)
-  age: number;
+  age!: number;
 
   @IsEmail()
-  email: string;
+  email!: string;
 
   @IsString()
-  phone: string;
+  phone!: string;
 
   @Type(() => Number)
   @IsInt()
-  experience: number;
+  experience!: number;
 
   @IsString()
-  position: string;
+  position!: string;
 }

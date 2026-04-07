@@ -1,7 +1,6 @@
 import {
   Injectable,
   UnauthorizedException,
-  ConflictException,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -45,12 +44,11 @@ export class AuthService {
       const { password: _, ...userWithoutPassword } = user;
       return userWithoutPassword;
     } catch (error) {
-      if (error.code === 'P2002') {
-        throw new ConflictException(
-          'El correo electrónico ya está registrado.',
-        );
-      }
-      throw new InternalServerErrorException('Error al crear el usuario.');
+      const message =
+        error instanceof Error ? error.message : 'Error desconocido';
+      throw new InternalServerErrorException(
+        `Error al crear el usuario.: ${message}`,
+      );
     }
   }
 
@@ -90,11 +88,10 @@ export class AuthService {
         // Llamamos al servicio de email que configuramos con Resend
         await this.emailService.send2FACode(user.email, generatedCode);
       } catch (error) {
-        // Si falla el envío de correo, notificamos pero no bloqueamos el flujo
-        // (aunque lo ideal es que el admin sepa que no llegó)
+        const message =
+          error instanceof Error ? error.message : 'Error desconocido';
         throw new InternalServerErrorException(
-          'Error al enviar el código de seguridad. Por favor, intente de nuevo. Detalles: ' +
-            error.message,
+          `Error al enviar el código de seguridad: ${message}`,
         );
       }
 

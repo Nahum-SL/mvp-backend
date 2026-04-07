@@ -3,14 +3,14 @@ import { Type } from 'class-transformer';
 
 export class CreateLinkDto {
   @IsString()
-  title: string;
+  title!: string;
 
   @IsString()
-  description: string;
+  description!: string;
 
   // 1. QUITAMOS @IsUrl() y dejamos @IsString() para permitir "/"
   @IsString()
-  url: string;
+  url!: string;
 
   @IsString()
   @IsOptional()
