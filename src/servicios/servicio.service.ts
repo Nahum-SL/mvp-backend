@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { prismaAdp } from 'src/db';
 import { CreateServicioDto } from './dto/create-servicio.dto';
 import { UpdateServicioDto } from './dto/update-servicio.dto';
@@ -122,13 +126,14 @@ export class ServicioService {
 
   // Helper interno ajustado a Number
   async findOneById(id: number) {
-    const servicio = await prismaAdp.service.findUnique({
+    if (!id || isNaN(id)) {
+      throw new BadRequestException('ID inválido');
+    }
+
+    return await prismaAdp.service.findUnique({
       where: { id },
       include: { features: true },
     });
-    if (!servicio)
-      throw new NotFoundException(`Servicio con ID ${id} no encontrado`);
-    return servicio;
   }
 
   // Obtener datos para el admin
