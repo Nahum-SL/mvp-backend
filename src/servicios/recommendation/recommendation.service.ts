@@ -42,6 +42,13 @@ export class RecommendationService {
 
     const bestMatch = sorted[0];
 
+    if (!bestMatch) {
+      return {
+        bestMatch: null,
+        alternatives: [],
+        insights: null,
+      };
+    }
     return {
       bestMatch,
       alternatives: sorted.slice(1, 3),

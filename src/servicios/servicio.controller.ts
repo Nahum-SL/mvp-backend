@@ -112,13 +112,6 @@ export class ServicioController {
       search: query.search,
     });
   }
-
-  @Get('admin') // Podrías crear una ruta específica para el admin
-  @UseGuards(AuthGuard('jwt'))
-  findAllAdmin() {
-    return this.servicioService.findAllAdmin();
-  }
-
   // Obtener por id
   @Get(':id')
   async findOneById(@Param('id') id: string) {
@@ -127,6 +120,12 @@ export class ServicioController {
       throw new NotFoundException(`Servicio con ${id} no encontrado`);
     }
     return servicio;
+  }
+
+  @Get('admin') // Podrías crear una ruta específica para el admin
+  @UseGuards(AuthGuard('jwt'))
+  findAllAdmin() {
+    return this.servicioService.findAllAdmin();
   }
 
   @Get('slug/:slug')
