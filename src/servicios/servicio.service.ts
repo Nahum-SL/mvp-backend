@@ -149,4 +149,24 @@ export class ServicioService {
 
     return this.recommendationService.buildRecommendation(services, filters);
   }
+
+  async getScoredServices(filters: ServiceFilters) {
+    const services = await prismaAdp.service.findMany({
+      where: { isVisible: true },
+      include: { features: true },
+    });
+
+    return services.map((svc) => {
+      const result = this.recommendationService['calculateScore'](svc, filters);
+
+      return {
+        ...svc,
+        relevanceScore: result.score,
+        recommendationMeta: result.meta,
+        priorityScore: this.recommendationService['calculatePriorityScore'](
+          result.meta,
+        ),
+      };
+    });
+  }
 }

@@ -38,6 +38,15 @@ export class ServicioController {
     });
   }
 
+  @Get('scored')
+  getScored(@Query() query: RecommendationQueryDto) {
+    return this.servicioService.getScoredServices({
+      businessType: query.businessType,
+      painPoint: query.painPoint,
+      search: query.search,
+    });
+  }
+
   // PRIVADO: Solo admin puede crear
   @UseGuards(AuthGuard('jwt'))
   @Post()
