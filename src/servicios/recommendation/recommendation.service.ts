@@ -104,9 +104,9 @@ export class RecommendationService {
     }
 
     //  Métricas simuladas (luego puedes persistir esto)
-    const impact = Math.min(100, 60 + score * 0.5) + (service.id % 5);
-    const effort = Math.max(10, 70 - score * 0.3) + (service.id % 3);
-    const risk = Math.max(5, 50 - score * 0.2) + (service.id % 2);
+    const impact = Math.min(100, 60 + score * 0.5);
+    const effort = Math.max(10, 70 - score * 0.3);
+    const risk = Math.max(5, 50 - score * 0.2);
 
     return {
       score,
