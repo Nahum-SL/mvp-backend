@@ -6,10 +6,14 @@ import { prismaAdp } from 'src/db';
 
 @Injectable()
 export class RecommendationService {
+  // RECOMENDACIÓN PRINCIPAL
+  // Recibe filtros del usuario y devuelve la mejor recomendación + alternativas + insights
   buildRecommendation(services: Service[], filters: ServiceFilters) {
+    // Validar que haya al menos un filtro para recomendar
     const hasFilters =
       filters.businessType || filters.painPoint || filters.search;
 
+    // Si no hay filtros, no recomendamos nada (o podríamos recomendar los más populares, pero aquí optamos por no recomendar)
     if (!hasFilters) {
       return {
         bestMatch: null,
@@ -18,9 +22,12 @@ export class RecommendationService {
       };
     }
 
+    // Aplicar scoring a cada servicio basado en compatibilidad con filtros y características
     const scored: ScoredService[] = services.map((svc) => {
+      // Lógica de scoring personalizada
       const result = this.calculateScore(svc, filters);
 
+      // Devolvemos el servicio enriquecido con su score y metadata para insights
       return {
         ...svc,
         relevanceScore: result.score,
@@ -58,9 +65,12 @@ export class RecommendationService {
 
   //  MOTOR DE SCORING
   private calculateScore(service: Service, filters: ServiceFilters) {
+    // Lógica de scoring basada en compatibilidad con filtros y características del servicio
     let score = 0;
+    // Razones para el insight (luego se pueden usar para explicar la recomendación)
     const reasons: string[] = [];
 
+    // Evaluar compatibilidad con filtros
     const hasBusinessType =
       filters.businessType &&
       service.businessTypes.includes(filters.businessType);

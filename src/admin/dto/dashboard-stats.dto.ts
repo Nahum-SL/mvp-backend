@@ -4,4 +4,6 @@ export class DashboardStatsDto {
   posts!: number;
   links!: number;
   views!: string;
+  chartData!: { day: string; value: number }[];
+  viewsChart!: { day: string; value: number }[];
 }
