@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Service } from '@prisma/client';
 import { ServiceFilters, ScoredService } from './type';
-import { FEATURED_PRIORITY_IDS } from './constants';
 import { prismaAdp } from 'src/db';
 
 @Injectable()
@@ -106,11 +105,6 @@ export class RecommendationService {
         score += 20;
         reasons.push('Coincide con tu búsqueda');
       }
-    }
-
-    if (FEATURED_PRIORITY_IDS.includes(service.id)) {
-      score += 5;
-      reasons.push('Servicio estratégico recomendado');
     }
 
     //  Métricas simuladas (luego puedes persistir esto)
