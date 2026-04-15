@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id               String    @id @default(uuid())
+  email            String    @unique
+  password         String
+  name             String
+  role             Role      @default(CLIENTE)
+  avatar           String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  twoFactorCode    String?
+  twoFactorExpires DateTime?
+  posts            Post[]
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String
+  status    String
+  message   String
+  metadata  Json?
+  createdAt DateTime @default(now())
+}
+
+model Contacto {
+  id         String        @id @default(cuid())
+  email      String
+  telefono   String        @db.VarChar(15)
+  fechaNac   DateTime
+  comentario String?
+  status     ContactStatus @default(PENDING)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  name       String
+
+  @@map("contactos")
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  slug  String @unique
+  posts Post[]
+}
+
+model Post {
+  title       String
+  slug        String   @unique
+  excerpt     String   @db.VarChar(255)
+  content     String
+  image       String?
+  published   Boolean  @default(false)
+  readingTime Int      @default(5)
+  authorId    String
+  categoryId  Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  author      User     @relation(fields: [authorId], references: [id])
+  category    Category @relation(fields: [categoryId], references: [id])
+}
+
+model JobApplication {
+  id         String       @id @default(cuid())
+  fullName   String
+  dni        String       @unique
+  age        Int
+  email      String
+  phone      String
+  experience Int
+  position   String
+  cvUrl      String
+  createdAt  DateTime     @default(now())
+  status     JobAppStatus @default(PENDIENTE)
+  updatedAt  DateTime     @updatedAt
+}
+
+model IntranetLink {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  url         String
+  icon        String?
+  order       Int      @default(0)
+  isVisible   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Service {
+  id            Int              @id @default(autoincrement())
+  title         String
+  slug          String           @unique
+  description   String
+  icon          String?
+  businessTypes String[]
+  painPoints    String[]
+  isVisible     Boolean          @default(true)
+  order         Int              @default(0)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  image         String?
+  features      ServiceFeature[]
+
+  @@map("services")
+}
+
+model ServiceFeature {
+  id        Int     @id @default(autoincrement())
+  name      String
+  serviceId Int
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@map("service_features")
+}
+
+// --- IGNORAR (NO ESTA EN USO) ---
+model BusinessDiagnostic {
+  id          String    @id @default(cuid())
+  companyName String?
+  ruc         String?   @db.VarChar(11)
+  contactName String
+  email       String
+  phone       String    @db.VarChar(15)
+  responses   Json
+  score       Int
+  overallRisk RiskLevel @default(MEDIO)
+  source      String?   @default("radar_general")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("business_diagnostics")
+}
+
+// --- EN USO SOLO (ADMIN - OWNER)
+enum Role {
+  ADMIN
+  COLABORADOR
+  CLIENTE 
+  OWNER
+}
+
+enum ContactStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum JobAppStatus {
+  PENDIENTE
+  REVISADO
+  RECHAZADO
+}
+
+// --- IGNORAR ---
+enum RiskLevel {
+  BAJO
+  MEDIO
+  ALTO
+  CRITICO
+}
