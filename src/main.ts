@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { ValidationPipe, Logger } from '@nestjs/common'; // Añadimos Logger
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -28,7 +28,7 @@ async function bootstrap() {
   app.enableCors({
     origin: (origin, callback) => {
       const allowedOrigins = [
-        process.env.FRONTEND_URL,
+        'https://asescon-frontend.vercel.app',
         'http://localhost:3000',
         'http://localhost:3001',
       ];
@@ -49,7 +49,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.use(cookieParser);
+  app.use(cookieParser());
 
   const port = process.env.PORT || 3001;
   await app.listen(port);
