@@ -1,10 +1,11 @@
+// src/auth/auth.service.ts
 import {
   Injectable,
   UnauthorizedException,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { RegisterDto } from './dto/register.dto';
+// import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { prismaAdp } from 'src/db';
@@ -24,36 +25,36 @@ export class AuthService {
   // ---------------
   // No esta en uso
   // --- REGISTRO DE USUARIOS ---
-  async register(registerDto: RegisterDto) {
-    const { email, password, name, role, avatar } = registerDto;
+  // async register(registerDto: RegisterDto) {
+  //   const { email, password, name, role, avatar } = registerDto;
 
-    // 1. Encriptar contraseña con Bcrypt
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+  //   // 1. Encriptar contraseña con Bcrypt
+  //   const salt = await bcrypt.genSalt(10);
+  //   const hashedPassword = await bcrypt.hash(password, salt);
 
-    try {
-      const user = await prismaAdp.user.create({
-        data: {
-          email,
-          password: hashedPassword,
-          name,
-          role,
-          avatar,
-        },
-      });
+  //   try {
+  //     const user = await prismaAdp.user.create({
+  //       data: {
+  //         email,
+  //         password: hashedPassword,
+  //         name,
+  //         role,
+  //         avatar,
+  //       },
+  //     });
 
-      // No devolvemos el password en la respuesta
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password: _, ...userWithoutPassword } = user;
-      return userWithoutPassword;
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'Error desconocido';
-      throw new InternalServerErrorException(
-        `Error al crear el usuario.: ${message}`,
-      );
-    }
-  }
+  //     // No devolvemos el password en la respuesta
+  //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //     const { password: _, ...userWithoutPassword } = user;
+  //     return userWithoutPassword;
+  //   } catch (error) {
+  //     const message =
+  //       error instanceof Error ? error.message : 'Error desconocido';
+  //     throw new InternalServerErrorException(
+  //       `Error al crear el usuario.: ${message}`,
+  //     );
+  //   }
+  // }
   // --------------
   // --- EN USO ---
   // --------------

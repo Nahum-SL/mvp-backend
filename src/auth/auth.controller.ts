@@ -1,3 +1,4 @@
+// src/auth/auth.controller.ts
 import {
   Controller,
   Post,
@@ -6,6 +7,7 @@ import {
   HttpStatus,
   UseGuards,
   Get,
+  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -25,6 +27,12 @@ export class AuthController {
   @HttpCode(HttpStatus.OK) // Cambiamos de 201 (Created) a 200 (OK) para el login
   async login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('me')
+  getMe(@Req() req) {
+    return req.user;
   }
 
   // EJEMPLO 1: Ruta solo para OWNER (Configuraciones críticas)

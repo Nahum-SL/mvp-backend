@@ -1,3 +1,4 @@
+// src/main.ts
 import 'dotenv/config';
 import { ValidationPipe, Logger } from '@nestjs/common'; // Añadimos Logger
 import { NestFactory } from '@nestjs/core';
