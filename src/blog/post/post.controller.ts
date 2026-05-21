@@ -137,21 +137,21 @@ export class PostsController {
     return this.postsService.findAllPublic();
   }
 
+  @Get('slug/:slug')
+  async findOneBySlug(@Param('slug') slug: string) {
+    const post = await this.postsService.findOneBySlug(slug);
+    if (!post) {
+      throw new NotFoundException(`Post con slug ${slug} no encontrado`);
+    }
+    return post;
+  }
+
   // Endpoint de getPostById() en Next.js -->
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const post = await this.postsService.findOneById(Number(id));
     if (!post) {
       throw new NotFoundException(`Post con ID ${id} no encontrado`);
-    }
-    return post;
-  }
-
-  @Get('slug/:slug')
-  async findOneBySlug(@Param('slug') slug: string) {
-    const post = await this.postsService.findOneBySlug(slug);
-    if (!post) {
-      throw new NotFoundException(`Post con slug ${slug} no encontrado`);
     }
     return post;
   }
