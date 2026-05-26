@@ -28,7 +28,7 @@ export class CloudinaryService {
 
     return new Promise<UploadApiResponse>((resolve, reject) => {
       const upload = cloudinary.uploader.upload_stream(
-        { folder: `asescon/${folder}`, resource_type: 'auto' },
+        { folder: `asescon/${folder}`, resource_type: 'auto', type: 'upload' },
         (
           error: UploadApiErrorResponse | undefined,
           result: UploadApiResponse | undefined,
