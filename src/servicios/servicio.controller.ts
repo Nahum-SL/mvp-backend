@@ -12,6 +12,10 @@ import {
   UploadedFile,
   BadRequestException,
   NotFoundException,
+<<<<<<< HEAD
+=======
+  ParseIntPipe,
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -103,6 +107,28 @@ export class ServicioController {
     return this.servicioService.update(serviceId, updateServicioDto, imageUrl);
   }
 
+<<<<<<< HEAD
+=======
+  @Get('admin') // Podrías crear una ruta específica para el admin
+  @UseGuards(AuthGuard('jwt'))
+  findAllAdmin() {
+    return this.servicioService.findAllAdmin();
+  }
+
+  @Get('slug/:slug')
+  async findOneBySlug(@Param('slug') slug: string) {
+    return await this.servicioService.findOneBySlug(slug);
+  }
+
+  // RUTA PÚBLICA (Única)
+  // Maneja tanto el "ver todos" como el "selector inteligente" con Query Params
+  @Get()
+  findAll(@Query('type') type?: string, @Query('pain') pain?: string) {
+    // Si no hay queries, el service debería devolver todos los visibles por defecto
+    return this.servicioService.findAll(type, pain);
+  }
+
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
   // Eliminar Servicio
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
@@ -124,13 +150,18 @@ export class ServicioController {
 
   // Obtener por id
   @Get(':id')
+<<<<<<< HEAD
   async findOneById(@Param('id') id: string) {
+=======
+  async findOneById(@Param('id', ParseIntPipe) id: number) {
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
     const servicio = await this.servicioService.findOneById(Number(id));
     if (!servicio) {
       throw new NotFoundException(`Servicio con ${id} no encontrado`);
     }
     return servicio;
   }
+<<<<<<< HEAD
 
   @Get('admin') // Podrías crear una ruta específica para el admin
   @UseGuards(AuthGuard('jwt'))
@@ -150,4 +181,6 @@ export class ServicioController {
     // Si no hay queries, el service debería devolver todos los visibles por defecto
     return this.servicioService.findAll(type, pain);
   }
+=======
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
 }

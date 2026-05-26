@@ -10,7 +10,11 @@ async function main() {
 
   // 1. Configuración de Passwords (Usa variables de entorno en prod si es posible)
   if (!adminEmail || !adminPass) {
+<<<<<<< HEAD
     throw new Error('❌ Faltan variables de entorno en el .env');
+=======
+    throw new Error('Faltan variables de entorno en el .env');
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
   }
 
   // 2. Crear TU CUENTA como Desarrollador / Admin

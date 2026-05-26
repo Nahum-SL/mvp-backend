@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+// src/auth/auth.controller.ts
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
 import {
   Controller,
   Post,
@@ -6,6 +10,10 @@ import {
   HttpStatus,
   UseGuards,
   Get,
+<<<<<<< HEAD
+=======
+  Req,
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
@@ -27,6 +35,15 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
+<<<<<<< HEAD
+=======
+  @UseGuards(AuthGuard('jwt'))
+  @Get('me')
+  getMe(@Req() req) {
+    return req.user;
+  }
+
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
   // EJEMPLO 1: Ruta solo para OWNER (Configuraciones críticas)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.OWNER)

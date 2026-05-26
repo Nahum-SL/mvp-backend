@@ -137,6 +137,18 @@ export class PostsController {
     return this.postsService.findAllPublic();
   }
 
+<<<<<<< HEAD
+=======
+  @Get('slug/:slug')
+  async findOneBySlug(@Param('slug') slug: string) {
+    const post = await this.postsService.findOneBySlug(slug);
+    if (!post) {
+      throw new NotFoundException(`Post con slug ${slug} no encontrado`);
+    }
+    return post;
+  }
+
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
   // Endpoint de getPostById() en Next.js -->
   @Get(':id')
   async findOne(@Param('id') id: string) {
@@ -146,6 +158,7 @@ export class PostsController {
     }
     return post;
   }
+<<<<<<< HEAD
 
   @Get('slug/:slug')
   async findOneBySlug(@Param('slug') slug: string) {
@@ -155,4 +168,6 @@ export class PostsController {
     }
     return post;
   }
+=======
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
 }

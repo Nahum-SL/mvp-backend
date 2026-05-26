@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+// src/auth/auth.module.ts
+
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';

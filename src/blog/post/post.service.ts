@@ -2,14 +2,25 @@ import { Injectable } from '@nestjs/common';
 import { prismaAdp } from 'src/db';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+<<<<<<< HEAD
+=======
+import slugify from 'slugify';
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
 
 @Injectable()
 export class PostsService {
   async create(data: CreatePostDto, imageUrl: string, authorId: string) {
+<<<<<<< HEAD
     const baseSlug = data.title
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)+/g, '');
+=======
+    const safeSlug = slugify(data.slug || data.title, {
+      lower: true,
+      strict: true,
+    });
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
 
     return await prismaAdp.post.create({
       data: {
@@ -22,7 +33,11 @@ export class PostsService {
         authorId: authorId,
         image: imageUrl,
         published: String(data.published) === 'true', // Manejo robusto de FormData
+<<<<<<< HEAD
         slug: `${baseSlug}-${Date.now().toString().slice(-4)}`,
+=======
+        slug: safeSlug,
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
         readingTime: Math.ceil(data.content.split(' ').length / 200),
       },
       include: {
@@ -60,12 +75,20 @@ export class PostsService {
       if (imageUrl) data.image = imageUrl;
 
       // Solo actualizamos el slug si el título cambió
+<<<<<<< HEAD
       if (updatePostDto.title && updatePostDto.title !== postExists.title) {
         const baseSlug = updatePostDto.title
           .toLowerCase()
           .replace(/[^a-z0-9]+/g, '-')
           .replace(/(^-|-$)+/g, '');
         data.slug = `${baseSlug}-${Date.now().toString().slice(-4)}`;
+=======
+      if (updatePostDto.slug) {
+        data.slug = slugify(updatePostDto.slug, {
+          lower: true,
+          strict: true,
+        });
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
       }
 
       return await prismaAdp.post.update({

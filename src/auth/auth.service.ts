@@ -1,10 +1,18 @@
+<<<<<<< HEAD
+=======
+// src/auth/auth.service.ts
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
 import {
   Injectable,
   UnauthorizedException,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+<<<<<<< HEAD
 import { RegisterDto } from './dto/register.dto';
+=======
+// import { RegisterDto } from './dto/register.dto';
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { prismaAdp } from 'src/db';
@@ -19,6 +27,7 @@ export class AuthService {
     private emailService: EmailService,
     private auditService: AuditService,
   ) {}
+<<<<<<< HEAD
 
   // --- REGISTRO DE USUARIOS ---
   async register(registerDto: RegisterDto) {
@@ -52,6 +61,46 @@ export class AuthService {
     }
   }
 
+=======
+  // ---------------
+  // --- IGNORAR ---
+  // ---------------
+  // No esta en uso
+  // --- REGISTRO DE USUARIOS ---
+  // async register(registerDto: RegisterDto) {
+  //   const { email, password, name, role, avatar } = registerDto;
+
+  //   // 1. Encriptar contraseña con Bcrypt
+  //   const salt = await bcrypt.genSalt(10);
+  //   const hashedPassword = await bcrypt.hash(password, salt);
+
+  //   try {
+  //     const user = await prismaAdp.user.create({
+  //       data: {
+  //         email,
+  //         password: hashedPassword,
+  //         name,
+  //         role,
+  //         avatar,
+  //       },
+  //     });
+
+  //     // No devolvemos el password en la respuesta
+  //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //     const { password: _, ...userWithoutPassword } = user;
+  //     return userWithoutPassword;
+  //   } catch (error) {
+  //     const message =
+  //       error instanceof Error ? error.message : 'Error desconocido';
+  //     throw new InternalServerErrorException(
+  //       `Error al crear el usuario.: ${message}`,
+  //     );
+  //   }
+  // }
+  // --------------
+  // --- EN USO ---
+  // --------------
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
   // --- LOGIN Y GENERACIÓN DE TOKEN ---
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;

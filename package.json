@@ -35,15 +35,26 @@
     "@prisma/client": "^7.6.0",
     "@react-email/components": "^1.0.10",
     "bcrypt": "^6.0.0",
+<<<<<<< HEAD
     "prisma": "^7.6.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.3",
     "cloudinary": "^2.9.0",
+=======
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.3",
+    "cloudinary": "^2.9.0",
+    "cookie-parser": "^1.4.7",
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
     "date-fns": "^4.1.0",
     "dotenv": "^17.3.1",
     "multer": "^2.0.2",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
+<<<<<<< HEAD
+=======
+    "prisma": "^7.6.0",
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
     "reflect-metadata": "^0.2.2",
     "resend": "^6.9.4",
     "rxjs": "^7.8.1",

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 onlyBuiltDependencies:
   - '@nestjs/core'
   - '@prisma/engines'
@@ -5,3 +6,12 @@ onlyBuiltDependencies:
   - prisma
   - protobufjs
   - unrs-resolver
+=======
+allowBuilds:
+  '@nestjs/core': set this to true or false
+  '@prisma/engines': set this to true or false
+  bcrypt: set this to true or false
+  prisma: set this to true or false
+  protobufjs: set this to true or false
+  unrs-resolver: set this to true or false
+>>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
