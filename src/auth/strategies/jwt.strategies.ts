@@ -1,35 +1,35 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PrismaService } from 'prisma/prisma.service';
+
+import { prismaAdp } from 'src/db';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private prisma: PrismaService) {
+  constructor() {
     super({
-<<<<<<< HEAD
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-=======
       jwtFromRequest: ExtractJwt.fromExtractors([
         ExtractJwt.fromAuthHeaderAsBearerToken(),
         (req) => req?.cookies?.asescon_token,
       ]),
->>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
       ignoreExpiration: false,
       secretOrKey: process.env.JWT_SECRET || 'clave-secreta-asescon-2026',
     });
   }
 
   async validate(payload: { id: string; email: string }) {
-    // Verificamos que el usuario aún exista en Neon
-    const user = await this.prisma.user.findUnique({
+    const user = await prismaAdp.user.findUnique({
       where: { id: payload.id },
     });
 
-    if (!user)
+    if (!user) {
       throw new UnauthorizedException('Token no válido o usuario inexistente');
+    }
 
-    // Lo que retornemos aquí se inyectará en el objeto 'req.user'
-    return { id: user.id, email: user.email, role: user.role };
+    return {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    };
   }
 }

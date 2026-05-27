@@ -16,13 +16,10 @@ export class CreatePostDto {
 
   @IsString()
   @IsNotEmpty()
-<<<<<<< HEAD
-=======
   slug!: string;
 
   @IsString()
   @IsNotEmpty()
->>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
   @MaxLength(255)
   excerpt!: string;
 

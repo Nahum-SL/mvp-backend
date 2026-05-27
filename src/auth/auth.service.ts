@@ -1,18 +1,10 @@
-<<<<<<< HEAD
-=======
-// src/auth/auth.service.ts
->>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
 import {
   Injectable,
   UnauthorizedException,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-<<<<<<< HEAD
 import { RegisterDto } from './dto/register.dto';
-=======
-// import { RegisterDto } from './dto/register.dto';
->>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { prismaAdp } from 'src/db';
@@ -27,7 +19,6 @@ export class AuthService {
     private emailService: EmailService,
     private auditService: AuditService,
   ) {}
-<<<<<<< HEAD
 
   // --- REGISTRO DE USUARIOS ---
   async register(registerDto: RegisterDto) {
@@ -61,7 +52,6 @@ export class AuthService {
     }
   }
 
-=======
   // ---------------
   // --- IGNORAR ---
   // ---------------
@@ -100,7 +90,6 @@ export class AuthService {
   // --------------
   // --- EN USO ---
   // --------------
->>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
   // --- LOGIN Y GENERACIÓN DE TOKEN ---
   async login(loginDto: LoginDto) {
     const { email, password } = loginDto;

@@ -1,15 +1,9 @@
-<<<<<<< HEAD
-=======
 // src/main.ts
->>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
 import 'dotenv/config';
 import { ValidationPipe, Logger } from '@nestjs/common'; // Añadimos Logger
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-<<<<<<< HEAD
-=======
 import cookieParser from 'cookie-parser';
->>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -35,11 +29,7 @@ async function bootstrap() {
   app.enableCors({
     origin: (origin, callback) => {
       const allowedOrigins = [
-<<<<<<< HEAD
-        process.env.FRONTEND_URL,
-=======
         'https://asescon-frontend.vercel.app',
->>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
         'http://localhost:3000',
         'http://localhost:3001',
       ];
@@ -60,11 +50,8 @@ async function bootstrap() {
     credentials: true,
   });
 
-<<<<<<< HEAD
-=======
   app.use(cookieParser());
 
->>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
   const port = process.env.PORT || 3001;
   await app.listen(port);
 

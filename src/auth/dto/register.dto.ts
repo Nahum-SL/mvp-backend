@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import {
   IsString,
   IsEmail,
@@ -32,7 +31,7 @@ export class RegisterDto {
   @IsOptional()
   avatar?: string;
 }
-=======
+
 // import {
 //   IsString,
 //   IsEmail,
@@ -66,4 +65,3 @@ export class RegisterDto {
 //   @IsOptional()
 //   avatar?: string;
 // }
->>>>>>> 7f7490cce78565740eef7ab277405d490b2cfc5f
