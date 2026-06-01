@@ -13,3 +13,11 @@ export class AuditQueryDto {
   @IsString()
   limit?: string; // Para paginación básica
 }
+
+// Proximamente
+// enum AuditStatus {
+//   SUCCESS
+//   FAILED
+//   INFO
+//   ERROR
+// }

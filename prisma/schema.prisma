@@ -35,7 +35,7 @@ model Contacto {
   telefono   String        @db.VarChar(15)
   fechaNac   DateTime
   comentario String?
-  status     ContactStatus @default(PENDING)
+  status     ContactStatus @default(NEW)
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
   name       String
@@ -148,10 +148,11 @@ enum Role {
 }
 
 enum ContactStatus {
-  PENDING
-  CONFIRMED
-  CANCELLED
-  COMPLETED
+  NEW
+  CONTACTED
+  QUALIFIED
+  CLOSED
+  ARCHIVED
 }
 
 enum JobAppStatus {

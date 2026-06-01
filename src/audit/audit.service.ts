@@ -32,7 +32,7 @@ export class AuditService {
   async getStats() {
     const [total, errors, last24h] = await Promise.all([
       prismaAdp.auditLog.count(),
-      prismaAdp.auditLog.count({ where: { status: 'FAILED' } }),
+      prismaAdp.auditLog.count({ where: { status: 'ERROR' } }),
       prismaAdp.auditLog.count({
         where: {
           createdAt: { gte: new Date(Date.now() - 24 * 60 * 60 * 1000) },
@@ -44,7 +44,7 @@ export class AuditService {
   }
 
   // Se ejecutará el primer día de cada mes a la medianoche
-  // Algoritmo de limpieza de logs antiguos (más de 3 meses)
+  // Algoritmo de limpieza de logs antiguos (más de 2 meses)
   @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_NOON)
   async handleLogCleanup() {
     this.logger.log(

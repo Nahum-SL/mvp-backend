@@ -17,11 +17,13 @@ import { AuthGuard } from '@nestjs/passport';
 export class AuditController {
   constructor(private readonly auditService: AuditService) {}
 
+  @UseGuards(AuthGuard('jwt')) // Solo admins autenticados pueden ver logs
   @Get()
   async getLogs(@Query() query: AuditQueryDto) {
     return this.auditService.findAll(query);
   }
 
+  @UseGuards(AuthGuard('jwt')) // Solo admins autenticados pueden ver estadísticas
   @Get('stats')
   async getStats() {
     return this.auditService.getStats();
