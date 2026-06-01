@@ -46,8 +46,23 @@ export class UneteService {
 
   // Obtener los datos
   async findAll() {
-    return prismaAdp.jobApplication.findMany({
+    console.time('unete');
+    const res = prismaAdp.jobApplication.findMany({
+      select: {
+        id: true,
+        fullName: true,
+        dni: true,
+        age: true,
+        email: true,
+        phone: true,
+        experience: true,
+        position: true,
+        cvUrl: true,
+        status: true,
+      },
       orderBy: { createdAt: 'desc' },
     });
+    console.timeEnd('unete');
+    return res;
   }
 }

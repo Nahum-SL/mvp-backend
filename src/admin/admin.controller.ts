@@ -1,16 +1,16 @@
 // src/admin/admin.controller.ts
+
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { AdminService } from './admin.service';
+import { DashboardStatsService } from './services/dashboard-stats.service';
 
 @Controller('admin')
-@UseGuards(AuthGuard('jwt')) // Considera crear un RolesGuard si hay 'Editor' vs 'SuperAdmin'
+@UseGuards(AuthGuard('jwt'))
 export class AdminController {
-  constructor(private readonly adminService: AdminService) {}
+  constructor(private readonly dashboardStatsService: DashboardStatsService) {}
 
   @Get('stats')
-  async getDashboardStats() {
-    // Es buena práctica envolver esto en un log para saber quién accede a las métricas
-    return this.adminService.getStats();
+  getDashboardStats() {
+    return this.dashboardStatsService.getStats();
   }
 }

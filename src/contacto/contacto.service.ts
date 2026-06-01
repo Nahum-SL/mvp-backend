@@ -38,9 +38,21 @@ export class ContactoService {
 
   // Privado: Gestión administrativa
   async findAll() {
-    return prismaAdp.contacto.findMany({
+    console.time('contact');
+    const res = await prismaAdp.contacto.findMany({
+      select: {
+        id: true,
+        email: true,
+        telefono: true,
+        fechaNac: true,
+        status: true,
+        createdAt: true,
+        name: true,
+      },
       orderBy: { createdAt: 'desc' },
     });
+    console.timeEnd('contact');
+    return res;
   }
 
   async findOne(id: string) {

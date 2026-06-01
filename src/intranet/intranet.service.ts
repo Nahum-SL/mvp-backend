@@ -22,9 +22,19 @@ export class IntranetService {
   // --- MÉTODOS PARA EL ADMIN ---
 
   async findAll() {
-    return prismaAdp.intranetLink.findMany({
+    console.time('intranet-links');
+    const res = prismaAdp.intranetLink.findMany({
+      select: {
+        id: true,
+        title: true,
+        url: true,
+        isVisible: true,
+        order: true,
+      },
       orderBy: { order: 'asc' },
     });
+    console.timeEnd('intranet-links');
+    return res;
   }
 
   // Buscar por ID

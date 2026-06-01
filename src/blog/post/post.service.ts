@@ -92,13 +92,22 @@ export class PostsService {
 
   // Añadimos este para la tabla del Admin en Next.js
   async findAllAdmin() {
-    return await prismaAdp.post.findMany({
-      include: {
-        category: true,
+    console.time('posts');
+    const res = await prismaAdp.post.findMany({
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        image: true,
+        published: true,
+        createdAt: true,
+        category: { select: { name: true } },
         author: { select: { name: true } },
       },
       orderBy: { createdAt: 'desc' },
     });
+    console.timeEnd('posts');
+    return res;
   }
   // En post.service.ts
   async findAllPublic() {

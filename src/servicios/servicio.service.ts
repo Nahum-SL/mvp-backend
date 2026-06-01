@@ -133,12 +133,21 @@ export class ServicioService {
 
   // Obtener datos para el admin
   async findAllAdmin() {
-    return await prismaAdp.service.findMany({
-      include: {
-        features: true,
+    console.time('services');
+    const res = await prismaAdp.service.findMany({
+      select: {
+        id: true,
+        title: true,
+        image: true,
+        businessTypes: true,
+        slug: true,
+        isVisible: true,
       },
       orderBy: { createdAt: 'desc' },
     });
+    console.timeEnd('services');
+
+    return res;
   }
 
   async getRecommendation(filters: ServiceFilters) {
