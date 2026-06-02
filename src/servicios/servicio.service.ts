@@ -131,6 +131,25 @@ export class ServicioService {
     return servicio;
   }
 
+  async findAllPublic() {
+    const servicios = await prismaAdp.service.findMany({
+      where: { isVisible: true },
+      select: {
+        id: true,
+        title: true,
+        image: true,
+        businessTypes: true,
+        slug: true,
+        painPoints: true,
+        icon: true,
+        features: { select: { name: true } },
+        description: true,
+        order: true,
+      },
+    });
+    return servicios;
+  }
+
   // Obtener datos para el admin
   async findAllAdmin() {
     console.time('services');
@@ -159,23 +178,17 @@ export class ServicioService {
     return this.recommendationService.buildRecommendation(services, filters);
   }
 
+  // Modificación en src/servicio/servicio.service.ts
+
   async getScoredServices(filters: ServiceFilters) {
     const services = await prismaAdp.service.findMany({
       where: { isVisible: true },
       include: { features: true },
     });
 
-    return services.map((svc) => {
-      const result = this.recommendationService['calculateScore'](svc, filters);
-
-      return {
-        ...svc,
-        relevanceScore: result.score,
-        recommendationMeta: result.meta,
-        priorityScore: this.recommendationService['calculatePriorityScore'](
-          result.meta,
-        ),
-      };
-    });
+    // Invocación nativa, con auto-completado y validación de tipos
+    return services.map((svc) =>
+      this.recommendationService.getEnrichedService(svc, filters),
+    );
   }
 }

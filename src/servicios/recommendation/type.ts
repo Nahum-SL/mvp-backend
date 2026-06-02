@@ -26,5 +26,5 @@ export interface RecommendationResult {
     summary: string;
     confidence: number;
     reasoning: string[];
-  };
+  } | null;
 }

@@ -104,25 +104,6 @@ export class ServicioController {
     return this.servicioService.update(serviceId, updateServicioDto, imageUrl);
   }
 
-  @Get('admin') // Podrías crear una ruta específica para el admin
-  @UseGuards(AuthGuard('jwt'))
-  findAllAdmin() {
-    return this.servicioService.findAllAdmin();
-  }
-
-  @Get('slug/:slug')
-  async findOneBySlug(@Param('slug') slug: string) {
-    return await this.servicioService.findOneBySlug(slug);
-  }
-
-  // RUTA PÚBLICA (Única)
-  // Maneja tanto el "ver todos" como el "selector inteligente" con Query Params
-  @Get()
-  findAll(@Query('type') type?: string, @Query('pain') pain?: string) {
-    // Si no hay queries, el service debería devolver todos los visibles por defecto
-    return this.servicioService.findAll(type, pain);
-  }
-
   // Eliminar Servicio
   @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
@@ -142,8 +123,37 @@ export class ServicioController {
     return this.servicioService.remove(serviceId);
   }
 
+  @Get('admin') // Podrías crear una ruta específica para el admin
+  @UseGuards(AuthGuard('jwt'))
+  findAllAdmin() {
+    return this.servicioService.findAllAdmin();
+  }
+
+  @Get('public') // Podrías crear una ruta específica para el admin
+  @UseGuards(AuthGuard('jwt'))
+  findAllPublic() {
+    return this.servicioService.findAllPublic();
+  }
+
+  // RUTA PÚBLICA (Única)
+  // Maneja tanto el "ver todos" como el "selector inteligente" con Query Params
+  @Get()
+  findAll(@Query('type') type?: string, @Query('pain') pain?: string) {
+    // Si no hay queries, el service debería devolver todos los visibles por defecto
+    return this.servicioService.findAll(type, pain);
+  }
+
+  @Get(':slug')
+  async findOneBySlug(@Param('slug') slug: string) {
+    const servicio = await this.servicioService.findOneBySlug(slug);
+    if (!servicio) {
+      throw new NotFoundException(`Servicio con slug ${slug} no encontrado`);
+    }
+    return servicio;
+  }
+
   // Obtener por id
-  @Get(':id')
+  @Get('admin/:id')
   async findOneById(@Param('id', ParseIntPipe) id: number) {
     const servicio = await this.servicioService.findOneById(Number(id));
     if (!servicio) {

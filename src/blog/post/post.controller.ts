@@ -12,6 +12,7 @@ import {
   Delete,
   NotFoundException,
   BadRequestException,
+  Query,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
@@ -20,6 +21,7 @@ import { CloudinaryService } from 'src/common/cloudinary/cloudinary.service';
 // Acciones
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { PostAdminFiltersDto } from './filters/post-filters.dto';
 
 @Controller('/post')
 export class PostsController {
@@ -128,8 +130,8 @@ export class PostsController {
 
   @Get('admin') // Podrías crear una ruta específica para el admin
   @UseGuards(AuthGuard('jwt'))
-  findAllAdmin() {
-    return this.postsService.findAllAdmin();
+  findAllAdmin(@Query() filters: PostAdminFiltersDto) {
+    return this.postsService.findAllAdmin(filters);
   }
 
   @Get() // La ruta pública

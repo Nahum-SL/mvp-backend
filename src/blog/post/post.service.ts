@@ -3,6 +3,9 @@ import { prismaAdp } from 'src/db';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import slugify from 'slugify';
+import { PostAdminFiltersDto } from './filters/post-filters.dto';
+
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PostsService {
@@ -90,25 +93,67 @@ export class PostsService {
     return post;
   }
 
-  // Añadimos este para la tabla del Admin en Next.js
-  async findAllAdmin() {
-    console.time('posts');
-    const res = await prismaAdp.post.findMany({
-      select: {
-        id: true,
-        title: true,
-        slug: true,
-        image: true,
-        published: true,
-        createdAt: true,
-        category: { select: { name: true } },
-        author: { select: { name: true } },
+  async findAllAdmin(filters: PostAdminFiltersDto) {
+    console.time('count');
+    const { page = 1, limit = 10, search, categoryId, published } = filters;
+
+    const skip = (page - 1) * limit;
+
+    const where: Prisma.PostWhereInput = {
+      ...(search && {
+        title: {
+          contains: search,
+          mode: Prisma.QueryMode.insensitive,
+        },
+      }),
+
+      ...(categoryId && {
+        categoryId,
+      }),
+
+      ...(published !== undefined && {
+        published,
+      }),
+    };
+
+    const [posts, totalItems] = await Promise.all([
+      prismaAdp.post.findMany({
+        skip,
+        take: limit,
+        where,
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          image: true,
+          published: true,
+          createdAt: true,
+          category: {
+            select: { name: true },
+          },
+          author: {
+            select: { name: true },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+
+      prismaAdp.post.count({ where }),
+    ]);
+
+    console.timeEnd('count');
+    return {
+      data: posts,
+      meta: {
+        totalItems,
+        totalPages: Math.ceil(totalItems / limit),
+        currentPage: page,
       },
-      orderBy: { createdAt: 'desc' },
-    });
-    console.timeEnd('posts');
-    return res;
+    };
   }
+
   // En post.service.ts
   async findAllPublic() {
     return await prismaAdp.post.findMany({
