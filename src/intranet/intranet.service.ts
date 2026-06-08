@@ -13,28 +13,10 @@ export class IntranetService {
     // Si es USER, solo ve los visibles.
     const whereCondition = role === Role.ADMIN ? {} : { isVisible: true };
 
-    return prismaAdp.intranetLink.findMany({
+    return await prismaAdp.intranetLink.findMany({
       where: whereCondition,
       orderBy: { order: 'asc' },
     });
-  }
-
-  // --- MÉTODOS PARA EL ADMIN ---
-
-  async findAll() {
-    console.time('intranet-links');
-    const res = prismaAdp.intranetLink.findMany({
-      select: {
-        id: true,
-        title: true,
-        url: true,
-        isVisible: true,
-        order: true,
-      },
-      orderBy: { order: 'asc' },
-    });
-    console.timeEnd('intranet-links');
-    return res;
   }
 
   // Buscar por ID
@@ -46,13 +28,13 @@ export class IntranetService {
 
   // Crear el Link
   async create(data: CreateLinkDto) {
-    return prismaAdp.intranetLink.create({ data });
+    return await prismaAdp.intranetLink.create({ data });
   }
 
   // Actualizar Link
   async update(id: number, data: UpdateLinkDto) {
     await this.findOne(id); // Valida si existe
-    return prismaAdp.intranetLink.update({
+    return await prismaAdp.intranetLink.update({
       where: { id },
       data,
     });
@@ -61,6 +43,22 @@ export class IntranetService {
   // Eliminar Link
   async remove(id: number) {
     await this.findOne(id);
-    return prismaAdp.intranetLink.delete({ where: { id } });
+    return await prismaAdp.intranetLink.delete({ where: { id } });
+  }
+
+  // --- MÉTODOS PARA PUBLICOS ---
+  async findPublicLinks() {
+    const res = await prismaAdp.intranetLink.findMany({
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        url: true,
+        icon: true,
+        isVisible: true,
+      },
+      orderBy: { order: 'asc' },
+    });
+    return res;
   }
 }

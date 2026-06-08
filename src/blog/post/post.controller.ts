@@ -134,7 +134,7 @@ export class PostsController {
     return this.postsService.findAllAdmin(filters);
   }
 
-  @Get() // La ruta pública
+  @Get('public') // La ruta pública
   findAll() {
     return this.postsService.findAllPublic();
   }

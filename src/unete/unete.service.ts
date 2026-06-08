@@ -45,7 +45,7 @@ export class UneteService {
   }
 
   // Obtener los datos
-  async findAll() {
+  async findAdminAll() {
     console.time('jobApplication');
     const res = prismaAdp.jobApplication.findMany({
       select: {

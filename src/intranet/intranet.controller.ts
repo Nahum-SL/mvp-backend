@@ -15,6 +15,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { IntranetService } from './intranet.service';
 import { CreateLinkDto } from './dto/create-link.dto';
 import { UpdateLinkDto } from './dto/update-link.dto';
+import { Role } from '@prisma/client';
 
 @Controller('intranet')
 export class IntranetController {
@@ -37,15 +38,14 @@ export class IntranetController {
   @Get('public-links')
   async getPublicLinks() {
     // Al no pasarle argumentos, el service aplicará { isVisible: true }
-    const links = await this.intranetService.getLinksByRole();
-    return { links };
+    return await this.intranetService.findPublicLinks();
   }
 
   // ------- RUTAS DE ADMINISTRACIÓN --------
   @UseGuards(AuthGuard('jwt')) // Aquí podrías añadir un RolesGuard(Role.ADMIN)
   @Get('admin/all')
   async findAll() {
-    return this.intranetService.findAll();
+    return this.intranetService.getLinksByRole(Role.OWNER || Role.ADMIN);
   }
 
   // Endpoint para crear link

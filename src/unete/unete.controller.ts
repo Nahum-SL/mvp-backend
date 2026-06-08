@@ -18,6 +18,8 @@ import { UneteService } from './unete.service';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { CloudinaryService } from '../common/cloudinary/cloudinary.service';
 import { UpdateApplicationStatusDto } from './dto/update-aplication-status.dto';
+import { Roles } from 'src/auth/decorators/role.decorator';
+import { Role } from '@prisma/client';
 
 @Controller('unete')
 export class UneteController {
@@ -26,7 +28,7 @@ export class UneteController {
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  @Post()
+  @Post('submit')
   @UseInterceptors(FileInterceptor('cv')) // 'cv' es el nombre del campo en el formulario
   async create(
     @Body() createDto: CreateApplicationDto,
@@ -49,10 +51,12 @@ export class UneteController {
       cvUrl: upload.secure_url,
     });
   }
+
   @UseGuards(AuthGuard('jwt')) // Solo el admin logueado
-  @Get()
-  findAll() {
-    return this.uneteService.findAll();
+  @Roles(Role.OWNER, Role.ADMIN)
+  @Get('admin')
+  findAllAdmin() {
+    return this.uneteService.findAdminAll();
   }
 
   @UseGuards(AuthGuard('jwt'))
