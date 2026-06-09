@@ -16,18 +16,28 @@ export class ContactoService {
     try {
       return await prismaAdp.contacto.create({
         data: {
-          ...createContactoDto,
+          name: createContactoDto.name,
+          email: createContactoDto.email,
+          telefono: createContactoDto.telefono,
           fechaNac: new Date(createContactoDto.fechaNac),
+          comentario: createContactoDto.comentario || null,
+          status: ContactStatus.PENDING,
         },
       });
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'Error desconocido';
-      await this.auditService.log(
-        'ERROR',
-        `Error al guardar contacto de ${createContactoDto.email}`,
-        message,
-      );
+
+      try {
+        await this.auditService.log(
+          'ERROR',
+          `Error al guardar contacto de ${createContactoDto.email}`,
+          message, // 👈 Pasamos directamente el string plano que te da el catch
+        );
+      } catch (auditError) {
+        console.error('Error crítico guardando la auditoría:', auditError);
+      }
+
       throw new InternalServerErrorException(
         `Error al registrar el contacto: ${message}`,
       );
@@ -46,6 +56,7 @@ export class ContactoService {
         telefono: true,
         fechaNac: true,
         status: true,
+        comentario: true,
         createdAt: true,
         name: true,
       },

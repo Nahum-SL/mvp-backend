@@ -56,7 +56,6 @@ export class IntranetController {
   }
 
   // Endpoint para actualizar link
-  @UseGuards(AuthGuard('jwt'))
   @Patch('admin/update/:id')
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -72,7 +71,6 @@ export class IntranetController {
     return this.intranetService.remove(id);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get('admin/link/:id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return this.intranetService.findOne(id);

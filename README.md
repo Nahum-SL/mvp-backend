@@ -1,98 +1,233 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Asescon Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend desarrollado en **NestJS** para el sistema Asescon, encargado de la lógica de negocio, autenticación, gestión de contenido y exposición de APIs para el frontend en Next.js.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## 🚀 Tecnologías principales
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+| Tecnología | Uso |
+|---|---|
+| NestJS | Arquitectura modular |
+| TypeScript | Tipado estricto |
+| Prisma ORM | Acceso a base de datos |
+| PostgreSQL | Base de datos relacional |
+| JWT + Passport | Autenticación segura |
+| Cloudinary | Gestión de imágenes |
+| Bcrypt | Hash de contraseñas |
+| Multer | Manejo de archivos |
+| Class Validator | Validación mediante DTOs |
 
-## Project setup
+---
 
-```bash
-$ pnpm install
+## 📦 Arquitectura del proyecto
+
+El backend está estructurado bajo una arquitectura modular típica de NestJS:
+
+```text
+src/
+├── auth/           # Autenticación JWT + Passport
+├── users/          # Gestión de usuarios y roles
+├── post/           # Módulo de blog
+├── servicio/       # Módulo de servicios
+├── intranet/       # Sistema interno de navegación
+├── contacto/       # Registro de leads
+├── prisma/         # Prisma Service (acceso a BD)
+└── common/         # Guards, DTOs y utilidades compartidas
+```
+## Cada módulo sigue la estructura:
+
+```text
+módulo/
+├── módulo.controller.ts   # API layer
+├── módulo.service.ts      # Business logic
+├── módulo.module.ts       # Declaración del módulo
+├── dto/                   # Validación de entrada
+└── guards/                # Seguridad JWT / roles
 ```
 
-## Compile and run the project
+---
+
+## ⚙️ Instalación
 
 ```bash
-# development
-$ pnpm run start
+# Clonar repositorio
+git clone https://github.com/tu-usuario/asescon-backend.git
 
-# watch mode
-$ pnpm run start:dev
+# Entrar al proyecto
+cd asescon-backend
 
-# production mode
-$ pnpm run start:prod
+# Instalar dependencias
+npm install
+# o
+pnpm install
 ```
 
-## Run tests
+---
+
+## 🔐 Variables de entorno
+
+Crear un archivo `.env` en la raíz del proyecto:
+
+```env
+# Base de datos
+DATABASE_URL=postgresql://usuario:password@localhost:5432/asescon
+
+# JWT
+JWT_SECRET=tu_secreto_jwt
+
+# Cloudinary
+CLOUDINARY_NAME=tu_cloud_name
+CLOUDINARY_API_KEY=tu_api_key
+CLOUDINARY_API_SECRET=tu_api_secret
+```
+
+---
+
+## 🗃️ Base de datos
 
 ```bash
-# unit tests
-$ pnpm run test
+# Ejecutar migraciones
+npx prisma migrate dev
 
-# e2e tests
-$ pnpm run test:e2e
+# Generar cliente Prisma
+npx prisma generate
 
-# test coverage
-$ pnpm run test:cov
+# Ver base de datos en Prisma Studio (opcional)
+npx prisma studio
 ```
 
-## Deployment
+**Modelos principales:**
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+| Modelo | Descripción |
+|---|---|
+| `User` | Usuarios del sistema |
+| `Post` | Entradas del blog |
+| `Service` | Servicios ofrecidos |
+| `IntranetLink` | Links del panel interno |
+| `Contacto` | Leads y formularios |
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+---
+
+## ▶️ Ejecución en desarrollo
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+npm run start:dev
+# o
+pnpm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+El servidor correrá en: [http://localhost:3001](http://localhost:3001)
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+## 🏗️ Build de producción
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+npm run build
+npm run start:prod
+```
 
-## Support
+---
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 📡 Endpoints principales
 
-## Stay in touch
+| Prefijo | Módulo |
+|---|---|
+| `/auth` | Autenticación (login, registro) |
+| `/post` | Blog (CRUD de posts) |
+| `/servicio` | Servicios |
+| `/intranet` | Sistema interno |
+| `/contacto` | Leads y contactos |
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+---
 
-## License
+## 🧠 Funcionalidades principales
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### 🔑 Autenticación y usuarios
+- Registro e inicio de sesión
+- JWT para sesiones seguras
+- Protección de rutas con `AuthGuard`
+- Manejo de roles: `ADMIN` / `USER` / `OWNER`
+
+### 📝 Blog (Posts)
+- CRUD completo de posts
+- Subida de imágenes a Cloudinary
+- Slug automático con `slugify`
+- Sistema de publicación (`published` / `draft`)
+- Cálculo de tiempo de lectura
+- Filtros administrativos (search, category, published)
+
+### 🧩 Servicios
+- CRUD de servicios
+- Sistema de recomendación por tipo de negocio y pain points
+- Gestión de imágenes
+- Ordenamiento y visibilidad pública
+
+### 🏢 Intranet
+- Gestión de links internos
+- Control de visibilidad por rol
+- Endpoints públicos y administrativos
+- Orden de navegación configurable
+
+### 📩 Contactos (Leads)
+- Registro de formularios de contacto
+- Gestión de estado del lead:
+
+  | Estado | Descripción |
+  |---|---|
+  | `PENDING` | Recibido, sin gestionar |
+  | `CONFIRMED` | Contacto confirmado |
+  | `COMPLETED` | Proceso finalizado |
+  | `CANCELLED` | Cancelado |
+
+- Panel administrativo para seguimiento
+- Persistencia en PostgreSQL
+
+---
+
+## 🛡️ Seguridad
+
+- ✅ JWT Strategy con Passport
+- ✅ Guards por autenticación (`AuthGuard`)
+- ✅ Validación de DTOs con `class-validator`
+- ✅ Sanitización de datos de entrada
+- ✅ Control de acceso por roles (base inicial implementada)
+
+---
+
+## ☁️ Cloudinary
+
+- Almacenamiento de imágenes externo
+- Subida desde backend usando `Multer`
+- Eliminación automática de imágenes antiguas al actualizar o borrar entidades
+
+---
+
+## ⭐ Características técnicas destacadas
+
+- Arquitectura modular y escalable
+- Separación clara entre `controller` / `service` / `dto`
+- Manejo robusto de errores con excepciones HTTP de NestJS
+- Integración completa con frontend Next.js
+- Optimización de queries con Prisma `select` / `include`
+- Filtros avanzados en endpoints administrativos
+
+---
+
+## 🔗 Frontend relacionado
+
+> Este backend está diseñado para trabajar en conjunto con el frontend en Next.js.
+> 📁 Repositorio frontend: [`/asescon-frontend`](../asescon-frontend)
+
+---
+
+## 👨‍💻 Autor
+
+Desarrollado por **[Nahum Salazar Levano](https://github.com/Nahum-SL)**
+
+---
+
+## 📌 Observaciones
+
+> Este backend está diseñado para soportar un sistema administrativo completo con enfoque en **escalabilidad**, **separación de responsabilidades** y **facilidad de mantenimiento**.

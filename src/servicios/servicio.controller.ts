@@ -153,7 +153,7 @@ export class ServicioController {
   }
 
   // Obtener por id
-  @Get('admin/:id')
+  @Get('id/:id')
   async findOneById(@Param('id', ParseIntPipe) id: number) {
     const servicio = await this.servicioService.findOneById(Number(id));
     if (!servicio) {
