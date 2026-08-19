@@ -1,5 +1,7 @@
-import { prismaAdp } from 'src/db';
 import * as bcrypt from 'bcrypt';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 async function main() {
   console.log('🚀 Iniciando el proceso de seeding...');
@@ -16,7 +18,7 @@ async function main() {
   // 2. Crear TU CUENTA como Desarrollador / Admin
   const myHashedPassword = await bcrypt.hash(adminPass, 10);
 
-  const devAccount = await prismaAdp.user.upsert({
+  const devAccount = await prisma.user.upsert({
     where: { email: adminEmail }, // Cambia esto por tu correo real
     update: { role: 'ADMIN' }, // Por si ya existía, aseguras el rol
     create: {
@@ -33,7 +35,7 @@ async function main() {
   // 3. Crear Cuenta de la Empresa (ADMIN por ahora, será OWNER después)
   // const clientHashedPassword = await bcrypt.hash('BienvenidoAsescon2026!', 10);
 
-  // const companyAccount = await prismaAdp.user.upsert({
+  // const companyAccount = await this.prisma.user.upsert({
   //   where: { email: 'admin@asescon.pe' },
   //   update: {},
   //   create: {
@@ -56,5 +58,6 @@ main()
     process.exit(1);
   })
   .finally(async () => {
-    await prismaAdp.$disconnect();
+    const prisma = new PrismaClient();
+    await prisma.$disconnect();
   });

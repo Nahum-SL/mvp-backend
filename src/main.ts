@@ -4,6 +4,9 @@ import { ValidationPipe, Logger } from '@nestjs/common'; // Añadimos Logger
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import cookieParser from 'cookie-parser';
+import { LoggingInterceptor } from './common/intercepetors/loggin.interceptor.ts';
+import { TransformResponseInterceptor } from './common/intercepetors/transform-response.interceptor';
+import { TimeoutInterceptor } from './common/intercepetors/timeout.interceptor';
 
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
@@ -13,6 +16,12 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   app.enableShutdownHooks();
+
+  app.useGlobalInterceptors(
+    new LoggingInterceptor(),
+    new TransformResponseInterceptor(),
+    new TimeoutInterceptor(),
+  );
 
   app.useGlobalPipes(
     new ValidationPipe({

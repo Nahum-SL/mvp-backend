@@ -11,13 +11,13 @@ model User {
   email            String    @unique
   password         String
   name             String
-  role             Role      @default(CLIENTE)
   avatar           String?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  role             Role      @default(CLIENTE)
   twoFactorCode    String?
   twoFactorExpires DateTime?
   posts            Post[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 }
 
 model AuditLog {

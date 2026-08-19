@@ -1,17 +1,19 @@
+
+coverage
+logs
+*.log
+
 # Dependencias
 node_modules
-npm-debug.log*
-pnpm-debug.log*
 
 # Builds
 dist
-build
-.next
 
 # Docker
-docker-compose.yml
+compose.yaml
 
 # Entorno y Secretos
+.env.*
 .env
 .env.local
 .env.production

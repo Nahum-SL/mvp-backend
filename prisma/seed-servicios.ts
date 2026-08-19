@@ -1,4 +1,5 @@
-import { prismaAdp } from '../src/db';
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 async function main() {
   console.log('🌱 Iniciando seeding de servicios...');
@@ -49,7 +50,7 @@ async function main() {
 
   for (const s of servicios) {
     const { features, ...data } = s;
-    await prismaAdp.service.upsert({
+    await prisma.service.upsert({
       where: { slug: s.slug },
       update: {},
       create: {
