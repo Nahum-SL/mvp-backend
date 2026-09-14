@@ -52,7 +52,7 @@ módulo/
 
 ```bash
 # Clonar repositorio
-git clone https://github.com/tu-usuario/asescon-backend.git
+git clone https://github.com/Nahum-SL/asescon-backend.git
 
 # Entrar al proyecto
 cd asescon-backend
