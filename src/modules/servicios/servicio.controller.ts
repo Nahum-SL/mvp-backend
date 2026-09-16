@@ -130,7 +130,6 @@ export class ServicioController {
   }
 
   @Get('public') // Podrías crear una ruta específica para el admin
-  @UseGuards(AuthGuard('jwt'))
   findAllPublic() {
     return this.servicioService.findAllPublic();
   }

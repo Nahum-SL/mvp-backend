@@ -36,6 +36,17 @@ export class IntranetController {
     return this.intranetService.create(createLinkDto);
   }
 
+  @Get('admin')
+  async findAll() {
+    return this.intranetService.getLinks();
+  }
+
+  // Obtener los links publicos
+  @Get('public')
+  async getPublicLinks(@CurrentUser('role') role: Role) {
+    return await this.intranetService.findPublicLinks(role);
+  }
+
   // Obtener de un link
   @Get(':id')
   @Roles(Role.ADMIN)
@@ -61,16 +72,5 @@ export class IntranetController {
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     return this.intranetService.delete(id);
-  }
-
-  @Get('admin')
-  async findAll() {
-    return this.intranetService.getLinks();
-  }
-
-  // Obtener los links publicos
-  @Get('public')
-  async getPublicLinks(@CurrentUser('role') role: Role) {
-    return await this.intranetService.findPublicLinks(role);
   }
 }
