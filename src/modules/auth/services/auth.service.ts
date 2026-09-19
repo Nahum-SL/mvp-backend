@@ -158,6 +158,7 @@ export class AuthService {
       role: user.role,
     };
     return {
+      success: true,
       user: {
         id: user.id,
         name: user.name,

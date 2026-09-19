@@ -120,6 +120,12 @@ importers:
       '@nestjs/testing':
         specifier: ^11.0.1
         version: 11.1.24(@nestjs/common@11.1.24(class-transformer@0.5.1)(class-validator@0.14.4)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.24)(@nestjs/platform-express@11.1.24)
+      '@swc/cli':
+        specifier: ^0.8.1
+        version: 0.8.1(@swc/core@1.16.2)(chokidar@4.0.3)
+      '@swc/core':
+        specifier: ^1.16.2
+        version: 1.16.2
       '@types/express':
         specifier: ^5.0.0
         version: 5.0.6
@@ -5278,8 +5284,7 @@ snapshots:
 
   '@js-sdsl/ordered-map@4.4.2': {}
 
-  '@keyv/serialize@1.1.1':
-    optional: true
+  '@keyv/serialize@1.1.1': {}
 
   '@kurkle/color@0.3.4': {}
 
@@ -5723,8 +5728,7 @@ snapshots:
 
   '@scarf/scarf@1.4.0': {}
 
-  '@sec-ant/readable-stream@0.4.1':
-    optional: true
+  '@sec-ant/readable-stream@0.4.1': {}
 
   '@selderee/plugin-htmlparser2@0.11.0':
     dependencies:
@@ -5734,11 +5738,9 @@ snapshots:
 
   '@sinclair/typebox@0.34.49': {}
 
-  '@sindresorhus/is@7.2.0':
-    optional: true
+  '@sindresorhus/is@7.2.0': {}
 
-  '@sindresorhus/merge-streams@4.0.0':
-    optional: true
+  '@sindresorhus/merge-streams@4.0.0': {}
 
   '@sinonjs/commons@3.0.1':
     dependencies:
@@ -5770,7 +5772,6 @@ snapshots:
       - bare-abort-controller
       - react-native-b4a
       - supports-color
-    optional: true
 
   '@swc/core-darwin-arm64@1.16.2':
     optional: true
@@ -5825,15 +5826,12 @@ snapshots:
       '@swc/core-win32-arm64-msvc': 1.16.2
       '@swc/core-win32-ia32-msvc': 1.16.2
       '@swc/core-win32-x64-msvc': 1.16.2
-    optional: true
 
-  '@swc/counter@0.1.3':
-    optional: true
+  '@swc/counter@0.1.3': {}
 
   '@swc/types@0.1.28':
     dependencies:
       '@swc/counter': 0.1.3
-    optional: true
 
   '@tokenizer/inflate@0.4.1':
     dependencies:
@@ -5914,8 +5912,7 @@ snapshots:
       '@types/express-serve-static-core': 5.1.1
       '@types/serve-static': 2.2.0
 
-  '@types/http-cache-semantics@4.2.0':
-    optional: true
+  '@types/http-cache-semantics@4.2.0': {}
 
   '@types/http-errors@2.0.5': {}
 
@@ -6262,13 +6259,11 @@ snapshots:
       file-type: 21.3.4
     transitivePeerDependencies:
       - supports-color
-    optional: true
 
   '@xhmikosr/bin-check@8.2.2':
     dependencies:
       execa: 9.6.1
       isexe: 4.0.0
-    optional: true
 
   '@xhmikosr/bin-wrapper@14.5.1':
     dependencies:
@@ -6280,7 +6275,6 @@ snapshots:
       - bare-abort-controller
       - react-native-b4a
       - supports-color
-    optional: true
 
   '@xhmikosr/decompress-tar@9.0.2':
     dependencies:
@@ -6291,7 +6285,6 @@ snapshots:
       - bare-abort-controller
       - react-native-b4a
       - supports-color
-    optional: true
 
   '@xhmikosr/decompress-tarbz2@9.0.2':
     dependencies:
@@ -6304,7 +6297,6 @@ snapshots:
       - bare-abort-controller
       - react-native-b4a
       - supports-color
-    optional: true
 
   '@xhmikosr/decompress-targz@9.0.1':
     dependencies:
@@ -6315,7 +6307,6 @@ snapshots:
       - bare-abort-controller
       - react-native-b4a
       - supports-color
-    optional: true
 
   '@xhmikosr/decompress-unzip@8.2.1':
     dependencies:
@@ -6324,7 +6315,6 @@ snapshots:
       yauzl: 3.4.0
     transitivePeerDependencies:
       - supports-color
-    optional: true
 
   '@xhmikosr/decompress@11.1.4':
     dependencies:
@@ -6338,7 +6328,6 @@ snapshots:
       - bare-abort-controller
       - react-native-b4a
       - supports-color
-    optional: true
 
   '@xhmikosr/downloader@16.3.1':
     dependencies:
@@ -6353,12 +6342,10 @@ snapshots:
       - bare-abort-controller
       - react-native-b4a
       - supports-color
-    optional: true
 
   '@xhmikosr/os-filter-obj@4.1.0':
     dependencies:
       system-architecture: 1.0.0
-    optional: true
 
   '@xtuc/ieee754@1.2.0': {}
 
@@ -6466,8 +6453,7 @@ snapshots:
 
   aws-ssl-profiles@1.1.2: {}
 
-  b4a@1.9.0:
-    optional: true
+  b4a@1.9.0: {}
 
   babel-jest@30.4.1(@babel/core@7.29.7):
     dependencies:
@@ -6525,8 +6511,7 @@ snapshots:
 
   balanced-match@4.0.4: {}
 
-  bare-events@2.9.2:
-    optional: true
+  bare-events@2.9.2: {}
 
   base64-js@1.5.1: {}
 
@@ -6546,13 +6531,11 @@ snapshots:
       binary-version: 7.1.0
       semver: 7.8.1
       semver-truncate: 3.0.0
-    optional: true
 
   binary-version@7.1.0:
     dependencies:
       execa: 8.0.1
       find-versions: 6.0.0
-    optional: true
 
   bl@4.1.0:
     dependencies:
@@ -6620,8 +6603,7 @@ snapshots:
     dependencies:
       streamsearch: 1.1.0
 
-  byte-counter@0.1.0:
-    optional: true
+  byte-counter@0.1.0: {}
 
   bytes@3.1.2: {}
 
@@ -6640,8 +6622,7 @@ snapshots:
       pkg-types: 2.3.1
       rc9: 3.0.1
 
-  cacheable-lookup@7.0.0:
-    optional: true
+  cacheable-lookup@7.0.0: {}
 
   cacheable-request@13.0.19:
     dependencies:
@@ -6652,7 +6633,6 @@ snapshots:
       mimic-response: 4.0.0
       normalize-url: 8.1.1
       responselike: 4.0.2
-    optional: true
 
   call-bind-apply-helpers@1.0.2:
     dependencies:
@@ -6751,11 +6731,9 @@ snapshots:
 
   commander@4.1.1: {}
 
-  commander@6.2.1:
-    optional: true
+  commander@6.2.1: {}
 
-  commander@8.3.0:
-    optional: true
+  commander@8.3.0: {}
 
   comment-json@5.0.0:
     dependencies:
@@ -6779,15 +6757,13 @@ snapshots:
 
   content-disposition@1.1.0: {}
 
-  content-disposition@2.0.1:
-    optional: true
+  content-disposition@2.0.1: {}
 
   content-type@1.0.5: {}
 
   content-type@2.0.0: {}
 
-  convert-hrtime@5.0.0:
-    optional: true
+  convert-hrtime@5.0.0: {}
 
   convert-source-map@2.0.0: {}
 
@@ -6844,7 +6820,6 @@ snapshots:
   decompress-response@10.0.0:
     dependencies:
       mimic-response: 4.0.0
-    optional: true
 
   dedent@1.7.2: {}
 
@@ -7090,7 +7065,6 @@ snapshots:
       bare-events: 2.9.2
     transitivePeerDependencies:
       - bare-abort-controller
-    optional: true
 
   events@3.3.0: {}
 
@@ -7117,7 +7091,6 @@ snapshots:
       onetime: 6.0.0
       signal-exit: 4.1.0
       strip-final-newline: 3.0.0
-    optional: true
 
   execa@9.6.1:
     dependencies:
@@ -7133,7 +7106,6 @@ snapshots:
       signal-exit: 4.1.0
       strip-final-newline: 4.0.0
       yoctocolors: 2.2.0
-    optional: true
 
   exit-x@0.2.2: {}
 
@@ -7184,13 +7156,11 @@ snapshots:
   ext-list@2.2.2:
     dependencies:
       mime-db: 1.54.0
-    optional: true
 
   ext-name@5.0.0:
     dependencies:
       ext-list: 2.2.2
       sort-keys-length: 1.0.1
-    optional: true
 
   extend@3.0.2: {}
 
@@ -7202,8 +7172,7 @@ snapshots:
 
   fast-diff@1.3.0: {}
 
-  fast-fifo@1.3.2:
-    optional: true
+  fast-fifo@1.3.2: {}
 
   fast-json-stable-stringify@2.1.0: {}
 
@@ -7231,7 +7200,6 @@ snapshots:
   figures@6.1.0:
     dependencies:
       is-unicode-supported: 2.1.0
-    optional: true
 
   file-entry-cache@8.0.0:
     dependencies:
@@ -7246,13 +7214,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  filename-reserved-regex@4.0.1:
-    optional: true
+  filename-reserved-regex@4.0.1: {}
 
   filenamify@7.0.3:
     dependencies:
       filename-reserved-regex: 4.0.1
-    optional: true
 
   fill-range@7.1.1:
     dependencies:
@@ -7283,7 +7249,6 @@ snapshots:
     dependencies:
       semver-regex: 4.0.5
       super-regex: 1.1.0
-    optional: true
 
   flat-cache@4.0.1:
     dependencies:
@@ -7314,8 +7279,7 @@ snapshots:
       typescript: 5.9.3
       webpack: 5.106.0(@swc/core@1.16.2)
 
-  form-data-encoder@4.1.0:
-    optional: true
+  form-data-encoder@4.1.0: {}
 
   form-data@4.0.5:
     dependencies:
@@ -7354,8 +7318,7 @@ snapshots:
 
   function-bind@1.1.2: {}
 
-  function-timeout@1.0.2:
-    optional: true
+  function-timeout@1.0.2: {}
 
   gaxios@7.1.4:
     dependencies:
@@ -7405,14 +7368,12 @@ snapshots:
 
   get-stream@6.0.1: {}
 
-  get-stream@8.0.1:
-    optional: true
+  get-stream@8.0.1: {}
 
   get-stream@9.0.1:
     dependencies:
       '@sec-ant/readable-stream': 0.4.1
       is-stream: 4.0.1
-    optional: true
 
   giget@3.2.0: {}
 
@@ -7495,7 +7456,6 @@ snapshots:
       p-cancelable: 4.0.1
       responselike: 4.0.2
       type-fest: 4.41.0
-    optional: true
 
   graceful-fs@4.2.11: {}
 
@@ -7545,8 +7505,7 @@ snapshots:
       entities: 4.5.0
     optional: true
 
-  http-cache-semantics@4.2.0:
-    optional: true
+  http-cache-semantics@4.2.0: {}
 
   http-errors@2.0.1:
     dependencies:
@@ -7569,7 +7528,6 @@ snapshots:
     dependencies:
       quick-lru: 5.1.1
       resolve-alpn: 1.2.1
-    optional: true
 
   https-proxy-agent@7.0.6:
     dependencies:
@@ -7580,11 +7538,9 @@ snapshots:
 
   human-signals@2.1.0: {}
 
-  human-signals@5.0.0:
-    optional: true
+  human-signals@5.0.0: {}
 
-  human-signals@8.0.1:
-    optional: true
+  human-signals@8.0.1: {}
 
   iconv-lite@0.7.2:
     dependencies:
@@ -7618,7 +7574,6 @@ snapshots:
   inspect-with-kind@1.0.5:
     dependencies:
       kind-of: 6.0.3
-    optional: true
 
   ipaddr.js@1.9.1: {}
 
@@ -7638,11 +7593,9 @@ snapshots:
 
   is-number@7.0.0: {}
 
-  is-plain-obj@1.1.0:
-    optional: true
+  is-plain-obj@1.1.0: {}
 
-  is-plain-obj@4.1.0:
-    optional: true
+  is-plain-obj@4.1.0: {}
 
   is-promise@4.0.0: {}
 
@@ -7650,21 +7603,17 @@ snapshots:
 
   is-stream@2.0.1: {}
 
-  is-stream@3.0.0:
-    optional: true
+  is-stream@3.0.0: {}
 
-  is-stream@4.0.1:
-    optional: true
+  is-stream@4.0.1: {}
 
   is-unicode-supported@0.1.0: {}
 
-  is-unicode-supported@2.1.0:
-    optional: true
+  is-unicode-supported@2.1.0: {}
 
   isexe@2.0.0: {}
 
-  isexe@4.0.0:
-    optional: true
+  isexe@4.0.0: {}
 
   istanbul-lib-coverage@3.2.2: {}
 
@@ -8103,10 +8052,8 @@ snapshots:
   keyv@5.6.0:
     dependencies:
       '@keyv/serialize': 1.1.1
-    optional: true
 
-  kind-of@6.0.3:
-    optional: true
+  kind-of@6.0.3: {}
 
   leac@0.6.0:
     optional: true
@@ -8163,8 +8110,7 @@ snapshots:
 
   long@5.3.2: {}
 
-  lowercase-keys@3.0.0:
-    optional: true
+  lowercase-keys@3.0.0: {}
 
   lru-cache@10.4.3: {}
 
@@ -8187,7 +8133,6 @@ snapshots:
       p-event: 6.0.1
       type-fest: 4.41.0
       web-worker: 1.5.0
-    optional: true
 
   make-dir@4.0.0:
     dependencies:
@@ -8236,11 +8181,9 @@ snapshots:
 
   mimic-fn@2.1.0: {}
 
-  mimic-fn@4.0.0:
-    optional: true
+  mimic-fn@4.0.0: {}
 
-  mimic-response@4.0.0:
-    optional: true
+  mimic-response@4.0.0: {}
 
   minimatch@10.2.5:
     dependencies:
@@ -8317,8 +8260,7 @@ snapshots:
 
   normalize-path@3.0.0: {}
 
-  normalize-url@8.1.1:
-    optional: true
+  normalize-url@8.1.1: {}
 
   npm-run-path@4.0.1:
     dependencies:
@@ -8327,13 +8269,11 @@ snapshots:
   npm-run-path@5.3.0:
     dependencies:
       path-key: 4.0.0
-    optional: true
 
   npm-run-path@6.0.0:
     dependencies:
       path-key: 4.0.0
       unicorn-magic: 0.3.0
-    optional: true
 
   object-assign@4.1.1: {}
 
@@ -8358,7 +8298,6 @@ snapshots:
   onetime@6.0.0:
     dependencies:
       mimic-fn: 4.0.0
-    optional: true
 
   optionator@0.9.4:
     dependencies:
@@ -8381,13 +8320,11 @@ snapshots:
       strip-ansi: 6.0.1
       wcwidth: 1.0.1
 
-  p-cancelable@4.0.1:
-    optional: true
+  p-cancelable@4.0.1: {}
 
   p-event@6.0.1:
     dependencies:
       p-timeout: 6.1.4
-    optional: true
 
   p-limit@2.3.0:
     dependencies:
@@ -8405,8 +8342,7 @@ snapshots:
     dependencies:
       p-limit: 3.1.0
 
-  p-timeout@6.1.4:
-    optional: true
+  p-timeout@6.1.4: {}
 
   p-try@2.2.0: {}
 
@@ -8423,8 +8359,7 @@ snapshots:
       json-parse-even-better-errors: 2.3.1
       lines-and-columns: 1.2.4
 
-  parse-ms@4.0.0:
-    optional: true
+  parse-ms@4.0.0: {}
 
   parseley@0.12.1:
     dependencies:
@@ -8453,8 +8388,7 @@ snapshots:
 
   path-key@3.1.1: {}
 
-  path-key@4.0.0:
-    optional: true
+  path-key@4.0.0: {}
 
   path-scurry@1.11.1:
     dependencies:
@@ -8477,8 +8411,7 @@ snapshots:
   peberminta@0.9.0:
     optional: true
 
-  pend@1.2.0:
-    optional: true
+  pend@1.2.0: {}
 
   perfect-debounce@2.1.0: {}
 
@@ -8528,7 +8461,6 @@ snapshots:
   piscina@4.9.4:
     optionalDependencies:
       '@napi-rs/nice': 1.1.1
-    optional: true
 
   pkg-dir@4.2.0:
     dependencies:
@@ -8576,7 +8508,6 @@ snapshots:
   pretty-ms@9.3.1:
     dependencies:
       parse-ms: 4.0.0
-    optional: true
 
   prisma@7.8.0(@types/react@19.2.15)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(typescript@5.9.3):
     dependencies:
@@ -8635,8 +8566,7 @@ snapshots:
     dependencies:
       side-channel: 1.1.0
 
-  quick-lru@5.1.1:
-    optional: true
+  quick-lru@5.1.1: {}
 
   range-parser@1.2.1: {}
 
@@ -8688,8 +8618,7 @@ snapshots:
     optionalDependencies:
       '@react-email/render': 2.0.6(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
 
-  resolve-alpn@1.2.1:
-    optional: true
+  resolve-alpn@1.2.1: {}
 
   resolve-cwd@3.0.0:
     dependencies:
@@ -8702,7 +8631,6 @@ snapshots:
   responselike@4.0.2:
     dependencies:
       lowercase-keys: 3.0.0
-    optional: true
 
   restore-cursor@3.1.0:
     dependencies:
@@ -8762,20 +8690,17 @@ snapshots:
   seek-bzip@2.0.0:
     dependencies:
       commander: 6.2.1
-    optional: true
 
   selderee@0.11.0:
     dependencies:
       parseley: 0.12.1
     optional: true
 
-  semver-regex@4.0.5:
-    optional: true
+  semver-regex@4.0.5: {}
 
   semver-truncate@3.0.0:
     dependencies:
       semver: 7.8.1
-    optional: true
 
   semver@6.3.1: {}
 
@@ -8855,12 +8780,10 @@ snapshots:
   sort-keys-length@1.0.1:
     dependencies:
       sort-keys: 1.1.2
-    optional: true
 
   sort-keys@1.1.2:
     dependencies:
       is-plain-obj: 1.1.0
-    optional: true
 
   source-map-support@0.5.13:
     dependencies:
@@ -8915,7 +8838,6 @@ snapshots:
     transitivePeerDependencies:
       - bare-abort-controller
       - react-native-b4a
-    optional: true
 
   string-length@4.0.2:
     dependencies:
@@ -8954,15 +8876,12 @@ snapshots:
     dependencies:
       inspect-with-kind: 1.0.5
       is-plain-obj: 1.1.0
-    optional: true
 
   strip-final-newline@2.0.0: {}
 
-  strip-final-newline@3.0.0:
-    optional: true
+  strip-final-newline@3.0.0: {}
 
-  strip-final-newline@4.0.0:
-    optional: true
+  strip-final-newline@4.0.0: {}
 
   strip-json-comments@3.1.1: {}
 
@@ -8977,7 +8896,6 @@ snapshots:
       function-timeout: 1.0.2
       make-asynchronous: 1.1.0
       time-span: 5.1.0
-    optional: true
 
   superagent@10.3.0:
     dependencies:
@@ -9019,8 +8937,7 @@ snapshots:
     dependencies:
       '@pkgr/core': 0.2.9
 
-  system-architecture@1.0.0:
-    optional: true
+  system-architecture@1.0.0: {}
 
   tapable@2.3.3: {}
 
@@ -9032,7 +8949,6 @@ snapshots:
     transitivePeerDependencies:
       - bare-abort-controller
       - react-native-b4a
-    optional: true
 
   teeny-request@10.1.2:
     dependencies:
@@ -9071,15 +8987,12 @@ snapshots:
       b4a: 1.9.0
     transitivePeerDependencies:
       - react-native-b4a
-    optional: true
 
-  through@2.3.8:
-    optional: true
+  through@2.3.8: {}
 
   time-span@5.1.0:
     dependencies:
       convert-hrtime: 5.0.0
-    optional: true
 
   tinyglobby@0.2.16:
     dependencies:
@@ -9218,12 +9131,10 @@ snapshots:
     dependencies:
       buffer: 5.7.1
       through: 2.3.8
-    optional: true
 
   undici-types@6.21.0: {}
 
-  unicorn-magic@0.3.0:
-    optional: true
+  unicorn-magic@0.3.0: {}
 
   universalify@2.0.1: {}
 
@@ -9301,8 +9212,7 @@ snapshots:
 
   web-streams-polyfill@3.3.3: {}
 
-  web-worker@1.5.0:
-    optional: true
+  web-worker@1.5.0: {}
 
   webpack-node-externals@3.0.0: {}
 
@@ -9405,7 +9315,6 @@ snapshots:
   yauzl@3.4.0:
     dependencies:
       pend: 1.2.0
-    optional: true
 
   yn@3.1.1: {}
 
@@ -9413,8 +9322,7 @@ snapshots:
 
   yoctocolors-cjs@2.1.3: {}
 
-  yoctocolors@2.2.0:
-    optional: true
+  yoctocolors@2.2.0: {}
 
   zeptomatch@2.1.0:
     dependencies:

@@ -10,12 +10,14 @@ import {
 import { AuthService } from './services/auth.service';
 import { LogindDto } from './dto/login.dto';
 import { AuthGuard } from '@nestjs/passport';
-// Roles
+// Guards
 import { RolesGuard } from '../../common/guards/roles.guard';
-import { Roles } from 'src/common/decorators/role.decorator';
+// Prisma
 import { Role } from '@prisma/client';
-
+// Dto
 import { Verify2faDto } from './dto/verify2-fa.dto';
+// Decorators
+import { Roles } from 'src/common/decorators/role.decorator';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 
 @Controller('auth')
